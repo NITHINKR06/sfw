@@ -6,10 +6,15 @@ import PracticePlayground from "@/components/PracticePlayground";
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
+  searchParams?: Promise<{ practiceTopic?: string }>;
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { categoryId } = await params;
+  const { practiceTopic } = (await searchParams) ?? {};
   const category = getCategory(categoryId);
 
   if (!category) {
@@ -102,6 +107,20 @@ export default async function CategoryPage({ params }: PageProps) {
               </div>
             </div>
           </div>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="#practice-lab"
+              className="inline-flex items-center gap-2 rounded-2xl border border-cyan-400/50 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:text-white hover:border-cyan-300 transition"
+            >
+              Open Practice Lab
+            </a>
+            <a
+              href="#detailed-roadmap"
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 hover:text-white transition"
+            >
+              Jump to roadmap
+            </a>
+          </div>
         </div>
       </header>
 
@@ -163,7 +182,7 @@ export default async function CategoryPage({ params }: PageProps) {
           </article>
         </section>
 
-        <section className="space-y-8">
+        <section id="detailed-roadmap" className="space-y-8">
           <div className="flex flex-col gap-3">
             <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">
               Detailed Roadmap
@@ -265,12 +284,20 @@ export default async function CategoryPage({ params }: PageProps) {
                                   )}
                                 </ul>
                               )}
-                              <Link
-                                href={`/category/${categoryId}/topic/${topic.id}/example/${example.id}`}
-                                className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-white"
-                              >
-                                Open full instructions →
-                              </Link>
+                              <div className="flex flex-wrap gap-3">
+                                <Link
+                                  href={`/category/${categoryId}/topic/${topic.id}/example/${example.id}`}
+                                  className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-white"
+                                >
+                                  Open full instructions →
+                                </Link>
+                                <Link
+                                  href={`/category/${categoryId}?practiceTopic=${topic.id}#practice-lab`}
+                                  className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white"
+                                >
+                                  Practice this topic
+                                </Link>
+                              </div>
                             </div>
                           </div>
                         </li>
@@ -322,7 +349,14 @@ export default async function CategoryPage({ params }: PageProps) {
           })}
         </section>
 
-        <PracticePlayground />
+        <PracticePlayground
+          topics={sortedTopics.map((topic) => ({
+            id: topic.id,
+            title: topic.title,
+          }))}
+          initialTopicId={practiceTopic ?? sortedTopics[0]?.id}
+          categoryTitle={category.title}
+        />
 
         <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
           <h2 className="text-2xl font-semibold text-white">

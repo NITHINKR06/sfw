@@ -59,7 +59,17 @@ const encourage = (mood: Mood): string => {
 console.log(encourage(learnerMood));`,
 };
 
-export default function PracticePlayground() {
+interface PracticePlaygroundProps {
+  topics?: { id: string; title: string }[];
+  initialTopicId?: string | null;
+  categoryTitle?: string;
+}
+
+export default function PracticePlayground({
+  topics,
+  initialTopicId,
+  categoryTitle,
+}: PracticePlaygroundProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [currentTab, setCurrentTab] = useState<Language>("html");
   const [code, setCode] = useState<Record<Language, string>>(defaultSnippets);
@@ -68,6 +78,17 @@ export default function PracticePlayground() {
   const [typescript, setTypescript] =
     useState<typeof import("typescript") | null>(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(
+    initialTopicId ?? topics?.[0]?.id ?? null
+  );
+
+  useEffect(() => {
+    if (initialTopicId && initialTopicId !== selectedTopicId) {
+      setSelectedTopicId(initialTopicId);
+    } else if (!selectedTopicId && topics && topics.length > 0) {
+      setSelectedTopicId(topics[0].id);
+    }
+  }, [initialTopicId, topics, selectedTopicId]);
 
   // Load the TypeScript transpiler lazily on the client
   useEffect(() => {
@@ -199,10 +220,12 @@ export default function PracticePlayground() {
     setIsRunning(false);
   }, [code, typescript]);
 
+  const currentTopic = topics?.find((topic) => topic.id === selectedTopicId);
+
   const recommendations = [
-    "Start with HTML markup, then layer CSS styles, then wire up JS/TS.",
-    "Use console.log liberally to understand what the browser sees.",
-    "Keep snippets focused on one concept—small experiments add up fast.",
+    `Write the smallest UI related to "${currentTopic?.title ?? "your idea"}" first.`,
+    "Layer CSS after HTML, then connect logic with JS/TS.",
+    "Use console.log frequently so you always know what the browser sees.",
   ];
 
   const troubleshootingTips = [
@@ -212,7 +235,10 @@ export default function PracticePlayground() {
   ];
 
   return (
-    <section className="bg-slate-900/50 border border-white/10 rounded-2xl p-8 text-slate-100">
+    <section
+      id="practice-lab"
+      className="bg-slate-900/50 border border-white/10 rounded-2xl p-8 text-slate-100"
+    >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-cyan-300">
@@ -226,6 +252,15 @@ export default function PracticePlayground() {
             Every run shows live output, console logs, and friendly guidance if
             something breaks.
           </p>
+          {topics && topics.length > 0 && (
+            <p className="text-xs text-slate-400 mt-2">
+              Currently focused on:{" "}
+              <span className="text-cyan-200 font-semibold">
+                {currentTopic?.title ?? "General practice"}
+              </span>{" "}
+              {categoryTitle ? `in ${categoryTitle}` : ""}
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
           <button
@@ -243,6 +278,29 @@ export default function PracticePlayground() {
           </button>
         </div>
       </div>
+
+      {topics && topics.length > 0 && (
+        <div className="mt-6 flex flex-col gap-3">
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+            Focus by topic
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {topics.map((topic) => (
+              <button
+                key={topic.id}
+                onClick={() => setSelectedTopicId(topic.id)}
+                className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
+                  selectedTopicId === topic.id
+                    ? "border-cyan-400/60 bg-cyan-400/20 text-cyan-100"
+                    : "border-white/10 text-slate-300 hover:border-cyan-400/40 hover:text-white"
+                }`}
+              >
+                {topic.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <div className="bg-slate-950/60 rounded-2xl border border-white/5">

@@ -3,73 +3,187 @@ import { categories } from "@/lib/data";
 import type { Topic } from "@/lib/data";
 
 export default function Home() {
+  const sortedCategories = [...categories].sort((a, b) => a.order - b.order);
+  const totalTopics = sortedCategories.reduce(
+    (sum, category) => sum + category.topics.length,
+    0
+  );
+  const totalSteps = sortedCategories.reduce((sum, category) => {
+    return (
+      sum +
+      category.topics.reduce(
+        (topicSum, topic: Topic) => topicSum + topic.examples.length,
+        0
+      )
+    );
+  }, 0);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">Code Learning Hub</h1>
-          <p className="mt-2 text-gray-600">
-            Master full-stack web development from basics to deployment. Learn HTML, CSS, JavaScript, React, Node.js, Express, Databases, and deploy to Vercel & Render - everything explained step-by-step!
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2 text-sm">
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
-              ✓ Step-by-Step Instructions
-            </span>
-            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-              ✓ Prerequisites Listed
-            </span>
-            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
-              ✓ Execution Guides
-            </span>
-            <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-              ✓ Learning Objectives
-            </span>
+    <div className="min-h-screen text-slate-100">
+      <header className="border-b border-white/5 bg-gradient-to-b from-slate-900/80 via-slate-950 to-slate-950">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.15),_transparent_55%)]" />
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="space-y-4">
+              <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">
+                Code Learning Hub
+              </p>
+              <h1 className="text-4xl sm:text-5xl font-semibold leading-tight text-white">
+                A full-stack roadmap with hands-on practice built in.
+              </h1>
+              <p className="text-base text-slate-300 max-w-2xl">
+                Every category contains prerequisites, detailed steps, runnable code,
+                and a practice playground on the same page. Follow it from zero setup
+                to production deployment without hunting for missing context.
+              </p>
+              <div className="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-wide text-slate-300">
+                <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2">
+                  Guided steps
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2">
+                  Commands included
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2">
+                  Practice lab on-page
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                  Tracks
+                </p>
+                <p className="text-4xl font-semibold text-white">{sortedCategories.length}</p>
+                <p className="text-sm text-slate-300">Complete learning journeys</p>
+              </article>
+              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                  Topics
+                </p>
+                <p className="text-4xl font-semibold text-white">{totalTopics}</p>
+                <p className="text-sm text-slate-300">Milestones with checkpoints</p>
+              </article>
+              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                  Steps
+                </p>
+                <p className="text-4xl font-semibold text-white">{totalSteps}</p>
+                <p className="text-sm text-slate-300">Actionable lessons</p>
+              </article>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories
-            .sort((a, b) => a.order - b.order)
-            .map((category) => (
-              <Link
-                key={category.id}
-                href={`/category/${category.id}`}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-200 hover:border-blue-300"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-4xl">{category.icon}</span>
-                  <h2 className="text-2xl font-semibold text-gray-900">{category.title}</h2>
-                </div>
-                <p className="text-gray-600 mb-4">{category.description}</p>
-                {category.prerequisites && category.prerequisites.length > 0 && (
-                  <div className="text-xs text-gray-500 mb-3">
-                    <strong>Prerequisites:</strong> {category.prerequisites.slice(0, 2).join(", ")}
-                    {category.prerequisites.length > 2 && "..."}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+        <section className="space-y-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">
+              Choose a path
+            </p>
+            <h2 className="text-3xl font-semibold text-white">
+              Pick the category that matches your next goal
+            </h2>
+            <p className="text-sm text-slate-300 max-w-3xl">
+              Each card lists prerequisites, total guided steps, and the skills you
+              will master. Click through to view the full roadmap plus an embedded
+              code runner for instant practice.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {sortedCategories.map((category) => {
+              const totalExamples = category.topics.reduce(
+                (sum: number, topic: Topic) => sum + topic.examples.length,
+                0
+              );
+
+              return (
+                <Link
+                  key={category.id}
+                  href={`/category/${category.id}`}
+                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-950 to-slate-950 p-6 shadow-xl shadow-black/30 transition-transform hover:-translate-y-1 hover:shadow-cyan-500/20"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.2),_transparent_55%)]" />
+                  <div className="relative flex items-center gap-4 mb-4">
+                    <span className="text-4xl drop-shadow">{category.icon}</span>
+                    <div>
+                      <h3 className="text-2xl font-semibold text-white">
+                        {category.title}
+                      </h3>
+                      <p className="text-xs uppercase tracking-[0.4em] text-cyan-200">
+                        {category.topics.length} topic
+                        {category.topics.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
                   </div>
-                )}
-                <div className="flex items-center justify-between text-sm">
-                  <div className="text-blue-600 font-medium">
-                    {category.topics.length} topic{category.topics.length !== 1 ? "s" : ""} •{" "}
-                    {category.topics.reduce((sum: number, topic: Topic) => sum + topic.examples.length, 0)} step
-                    {category.topics.reduce((sum: number, topic: Topic) => sum + topic.examples.length, 0) !== 1 ? "s" : ""}
+                  <p className="text-sm text-slate-300 mb-4 min-h-[70px]">
+                    {category.description}
+                  </p>
+
+                  {category.prerequisites && category.prerequisites.length > 0 && (
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-300">
+                      <p className="font-semibold text-slate-200 mb-1">
+                        Key prerequisites
+                      </p>
+                      <p className="line-clamp-2">
+                        {category.prerequisites.slice(0, 3).join(", ")}
+                        {category.prerequisites.length > 3 ? "…" : ""}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="relative flex items-center justify-between text-xs text-slate-400">
+                    <span>
+                      {category.topics.length} topic
+                      {category.topics.length === 1 ? "" : "s"} • {totalExamples} step
+                      {totalExamples === 1 ? "" : "s"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/20 px-3 py-1 text-cyan-200 font-semibold">
+                      Start learning →
+                    </span>
                   </div>
-                  <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
-                    Start Learning →
-                  </span>
-                </div>
-              </Link>
-            ))}
-        </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8 space-y-6">
+          <h2 className="text-2xl font-semibold text-white">
+            Built for frictionless learning
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <p className="text-sm font-semibold text-cyan-200">Actionable steps</p>
+              <p className="text-sm text-slate-300 mt-2">
+                Every lesson includes objectives, prerequisites, commands, and expected
+                output so you never guess what to do next.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <p className="text-sm font-semibold text-cyan-200">
+                Embedded code runner
+              </p>
+              <p className="text-sm text-slate-300 mt-2">
+                Practice HTML, CSS, JavaScript, and TypeScript right on the page. Logs
+                and errors show up instantly with friendly hints.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <p className="text-sm font-semibold text-cyan-200">Progress-aware</p>
+              <p className="text-sm text-slate-300 mt-2">
+                Topic pages show process overviews, verify-your-work checklists, and
+                commands to re-run whenever something fails.
+              </p>
+            </article>
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-600">
-          <p>© 2025 Code Learning Hub. All rights reserved.</p>
+      <footer className="border-t border-white/5 bg-slate-950/70">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-slate-400">
+          © {new Date().getFullYear()} Code Learning Hub. Keep building confidently.
         </div>
       </footer>
     </div>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory } from "@/lib/data";
 import type { Topic, CodeExample } from "@/lib/data";
+import PracticePlayground from "@/components/PracticePlayground";
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
@@ -15,125 +16,342 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound();
   }
 
+  const sortedTopics = [...category.topics].sort(
+    (a: Topic, b: Topic) => a.order - b.order
+  );
+
+  const totalExamples = sortedTopics.reduce(
+    (acc, topic) => acc + topic.examples.length,
+    0
+  );
+
+  const totalSteps = sortedTopics.reduce((acc, topic) => {
+    return (
+      acc +
+      topic.examples.reduce(
+        (exampleSum, example) => exampleSum + (example.steps?.length ?? 0),
+        0
+      )
+    );
+  }, 0);
+
+  const totalObjectives = sortedTopics.reduce((acc, topic) => {
+    return (
+      acc +
+      topic.examples.reduce(
+        (exampleSum, example) =>
+          exampleSum + (example.learningObjectives?.length ?? 0),
+        0
+      )
+    );
+  }, 0);
+
+  const commandRegex =
+    /^(npm|npx|yarn|pnpm|git|node|tsc|code|pip|python|docker|brew|sudo|apt|choco|winget|curl|tar|zip|unzip|mkdir|cd)/i;
+
+  const extractInstallationCommands = (topic: Topic): string[] => {
+    const commands = new Set<string>();
+    topic.examples.forEach((example) => {
+      [...(example.steps ?? []), ...(example.executionSteps ?? [])].forEach(
+        (step) => {
+          const trimmed = step.trim();
+          if (commandRegex.test(trimmed)) {
+            commands.add(trimmed);
+          }
+        }
+      );
+    });
+    return Array.from(commands);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <header className="relative border-b border-white/10 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.15),_transparent_55%)]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
           <Link
             href="/"
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium mb-4 inline-block"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-white transition"
           >
             ← Back to Home
           </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-4xl">{category.icon}</span>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{category.title}</h1>
-              <p className="mt-2 text-gray-600">{category.description}</p>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.3em] text-cyan-400/80">
+                Guided Program
+              </p>
+              <div className="flex items-center gap-4">
+                <span className="text-4xl drop-shadow">{category.icon}</span>
+                <div>
+                  <h1 className="text-4xl font-semibold tracking-tight text-white">
+                    {category.title}
+                  </h1>
+                  <p className="mt-2 text-base text-slate-300 max-w-2xl">
+                    {category.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm text-slate-200 backdrop-blur">
+              <span className="text-3xl font-semibold text-cyan-300">
+                {sortedTopics.length}
+              </span>
+              <div>
+                <p className="font-semibold">Topics in this path</p>
+                <p className="text-slate-400">Follow them in order for mastery</p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Prerequisites */}
-      {category.prerequisites && category.prerequisites.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-            <h3 className="font-semibold text-yellow-800 mb-2 flex items-center gap-2">
-              <span>📋</span> Prerequisites for {category.title}
-            </h3>
-            <ul className="list-disc list-inside text-yellow-700 space-y-1">
-              {category.prerequisites.map((prereq: string, index: number) => (
-                <li key={index}>{prereq}</li>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        {(category.prerequisites?.length ?? 0) > 0 && (
+          <section className="rounded-3xl border border-white/10 bg-amber-500/10 p-6 shadow-lg shadow-amber-500/10">
+            <h2 className="text-xl font-semibold text-amber-200 flex items-center gap-2">
+              <span>📋</span> Complete these first
+            </h2>
+            <p className="text-sm text-amber-100/80 mt-1">
+              These prerequisites ensure the rest of the guide makes sense.
+            </p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {category.prerequisites?.map((item, index) => (
+                <li
+                  key={`${item}-${index}`}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-amber-50/90"
+                >
+                  {item}
+                </li>
               ))}
             </ul>
-          </div>
-        </div>
-      )}
+          </section>
+        )}
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="space-y-8">
-          {category.topics
-            .sort((a: Topic, b: Topic) => a.order - b.order)
-            .map((topic: Topic) => (
-              <div
+        <section className="grid gap-4 md:grid-cols-3">
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+              Coverage
+            </p>
+            <h3 className="mt-2 text-3xl font-semibold text-white">
+              {totalExamples}
+            </h3>
+            <p className="text-sm text-slate-300">
+              Guided steps and checkpoints you will finish.
+            </p>
+          </article>
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+              Instructions
+            </p>
+            <h3 className="mt-2 text-3xl font-semibold text-white">
+              {totalSteps}
+            </h3>
+            <p className="text-sm text-slate-300">
+              Detailed actions so you never wonder what to do next.
+            </p>
+          </article>
+          <article className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+              Objectives
+            </p>
+            <h3 className="mt-2 text-3xl font-semibold text-white">
+              {totalObjectives}
+            </h3>
+            <p className="text-sm text-slate-300">
+              Learning goals you can tick off while progressing.
+            </p>
+          </article>
+        </section>
+
+        <section className="space-y-8">
+          <div className="flex flex-col gap-3">
+            <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">
+              Detailed Roadmap
+            </p>
+            <h2 className="text-3xl font-semibold text-white">
+              Follow this process topic by topic
+            </h2>
+            <p className="text-sm text-slate-300 max-w-3xl">
+              Each block below explains what to learn, how to practice, commands
+              to run, and how to verify your progress. Open an example to see the
+              full resources and files.
+            </p>
+          </div>
+
+          {sortedTopics.map((topic) => {
+            const commands = extractInstallationCommands(topic);
+            const sortedExamples = [...topic.examples].sort(
+              (a: CodeExample, b: CodeExample) => a.order - b.order
+            );
+
+            return (
+              <article
                 key={topic.id}
-                className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+                className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-950 to-slate-950 p-6 shadow-xl shadow-black/40"
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div>
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.4em] text-slate-400">
+                      <span className="rounded-full bg-cyan-400/20 px-3 py-1 text-cyan-200">
+                        Topic
+                      </span>
+                      <span>
+                        {sortedExamples.length} guided step
+                        {sortedExamples.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
+                    <h3 className="mt-3 text-2xl font-semibold text-white">
                       {topic.title}
-                    </h2>
+                    </h3>
                     {topic.description && (
-                      <p className="text-gray-600">{topic.description}</p>
+                      <p className="mt-1 text-sm text-slate-300 max-w-3xl">
+                        {topic.description}
+                      </p>
                     )}
                   </div>
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                    {topic.examples.length} Step{topic.examples.length !== 1 ? "s" : ""}
-                  </span>
+                  {topic.prerequisites && topic.prerequisites.length > 0 && (
+                    <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100 max-w-sm">
+                      <p className="font-semibold text-amber-200">Before you start</p>
+                      <ul className="mt-2 space-y-1">
+                        {topic.prerequisites.map((item) => (
+                          <li key={item}>• {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
-                {/* Topic Prerequisites */}
-                {topic.prerequisites && topic.prerequisites.length > 0 && (
-                  <div className="bg-gray-50 p-3 rounded mb-4">
-                    <p className="text-sm text-gray-700">
-                      <strong>Prerequisites:</strong>{" "}
-                      {topic.prerequisites.join(", ")}
-                    </p>
-                  </div>
-                )}
-
-                {/* Examples as Steps */}
-                <div className="space-y-3 mt-4">
-                  {topic.examples
-                    .sort((a: CodeExample, b: CodeExample) => a.order - b.order)
-                    .map((example: CodeExample, index: number) => (
-                      <Link
-                        key={example.id}
-                        href={`/category/${categoryId}/topic/${topic.id}/example/${example.id}`}
-                        className="block p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors group"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-10 h-10 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold group-hover:bg-blue-200 transition-colors">
-                            {example.order}
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-semibold text-gray-900 group-hover:text-blue-700">
-                              {example.title}
+                <div className="mt-6 grid gap-6 lg:grid-cols-[2fr,1fr]">
+                  <div className="rounded-2xl border border-white/5 bg-white/5 p-4">
+                    <h4 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
+                      Process overview
+                    </h4>
+                    <ol className="mt-4 space-y-4">
+                      {sortedExamples.map((example, index) => (
+                        <li
+                          key={example.id}
+                          className="rounded-2xl border border-white/10 bg-slate-950/40 p-4"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-400/20 text-sm font-semibold text-cyan-200">
+                              {index + 1}
                             </div>
-                            {example.description && (
-                              <div className="text-sm text-gray-600 mt-1">
-                                {example.description}
-                              </div>
-                            )}
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                              <span>
-                                {example.files.length} file
-                                {example.files.length !== 1 ? "s" : ""}
-                              </span>
-                              {example.learningObjectives && (
-                                <span>
-                                  {example.learningObjectives.length} objective
-                                  {example.learningObjectives.length !== 1
-                                    ? "s"
-                                    : ""}
+                            <div className="flex-1 space-y-2">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className="font-semibold text-white">
+                                  {example.title}
+                                </p>
+                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] uppercase tracking-wide text-slate-300">
+                                  {example.learningObjectives?.length ?? 0} objectives
                                 </span>
+                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] uppercase tracking-wide text-slate-300">
+                                  {example.steps?.length ?? 0} steps
+                                </span>
+                              </div>
+                              {example.description && (
+                                <p className="text-sm text-slate-300">
+                                  {example.description}
+                                </p>
                               )}
+                              {(example.steps?.length ?? 0) > 0 && (
+                                <ul className="text-sm text-slate-400 space-y-1">
+                                  {example.steps?.slice(0, 3).map((step) => (
+                                    <li key={step}>• {step}</li>
+                                  ))}
+                                  {(example.steps?.length ?? 0) > 3 && (
+                                    <li className="text-slate-500">
+                                      +{(example.steps?.length ?? 0) - 3} more in lesson
+                                    </li>
+                                  )}
+                                </ul>
+                              )}
+                              <Link
+                                href={`/category/${categoryId}/topic/${topic.id}/example/${example.id}`}
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-white"
+                              >
+                                Open full instructions →
+                              </Link>
                             </div>
                           </div>
-                          <div className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                            →
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+                      <h4 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
+                        Installation & commands
+                      </h4>
+                      {commands.length > 0 ? (
+                        <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                          {commands.map((command) => (
+                            <li
+                              key={command}
+                              className="rounded-xl border border-white/5 bg-black/40 px-3 py-2 font-mono text-xs text-cyan-200 flex items-center justify-between gap-2"
+                            >
+                              <span className="truncate">{command}</span>
+                              <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                                Copy & run
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="mt-3 text-sm text-slate-400">
+                          No terminal commands required. Follow the visual steps.
+                        </p>
+                      )}
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4 space-y-3">
+                      <h4 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
+                        Verify completion
+                      </h4>
+                      <ul className="text-sm text-slate-300 space-y-2">
+                        <li>• Screenshot your output or copy logs into notes.</li>
+                        <li>
+                          • Compare against the "Expected Output" inside each lesson.
+                        </li>
+                        <li>• If something fails, re-run commands from this panel.</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
+              </article>
+            );
+          })}
+        </section>
+
+        <PracticePlayground />
+
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <h2 className="text-2xl font-semibold text-white">
+            Stuck? Here is how to self-debug
+          </h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/40 p-5 space-y-2">
+              <h3 className="text-lg font-semibold text-cyan-200">Reproduce</h3>
+              <p className="text-sm text-slate-300">
+                Re-run the failing step, capture the exact command and error
+                message. Most fixes become obvious when you isolate the line.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/40 p-5 space-y-2">
+              <h3 className="text-lg font-semibold text-cyan-200">Compare</h3>
+              <p className="text-sm text-slate-300">
+                Match your code against the provided files. Small typos in import
+                paths or casing are the #1 cause of runtime errors.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-white/10 bg-slate-950/40 p-5 space-y-2">
+              <h3 className="text-lg font-semibold text-cyan-200">Validate</h3>
+              <p className="text-sm text-slate-300">
+                Use the practice lab console to ensure values look right. Once it
+                works there, rerun locally with the same commands.
+              </p>
+            </article>
+          </div>
+        </section>
       </main>
     </div>
   );

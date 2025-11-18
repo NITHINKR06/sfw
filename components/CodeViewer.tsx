@@ -88,13 +88,12 @@ export default function CodeViewer({
 
   return (
     <div className="space-y-6">
-      {/* Prerequisites Section */}
       {prerequisites && prerequisites.length > 0 && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-          <h3 className="font-semibold text-yellow-800 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-50">
+          <h3 className="font-semibold text-amber-200 mb-2 flex items-center gap-2">
             <span>📋</span> Prerequisites
           </h3>
-          <ul className="list-disc list-inside text-yellow-700 space-y-1">
+          <ul className="list-disc list-inside space-y-1 text-sm">
             {prerequisites.map((prereq, index) => (
               <li key={index}>{prereq}</li>
             ))}
@@ -102,13 +101,12 @@ export default function CodeViewer({
         </div>
       )}
 
-      {/* Learning Objectives */}
       {learningObjectives && learningObjectives.length > 0 && (
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-          <h3 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-cyan-50">
+          <h3 className="font-semibold text-cyan-200 mb-2 flex items-center gap-2">
             <span>🎯</span> Learning Objectives
           </h3>
-          <ul className="list-disc list-inside text-blue-700 space-y-1">
+          <ul className="list-disc list-inside space-y-1 text-sm">
             {learningObjectives.map((objective, index) => (
               <li key={index}>{objective}</li>
             ))}
@@ -116,13 +114,12 @@ export default function CodeViewer({
         </div>
       )}
 
-      {/* Step-by-Step Instructions */}
       {steps && steps.length > 0 && (
-        <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded">
-          <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-emerald-50">
+          <h3 className="font-semibold text-emerald-200 mb-3 flex items-center gap-2">
             <span>📝</span> Step-by-Step Instructions
           </h3>
-          <ol className="list-decimal list-inside space-y-2 text-green-700">
+          <ol className="list-decimal list-inside space-y-2 text-sm">
             {steps.map((step, index) => (
               <li key={index} className="pl-2">
                 {step}
@@ -132,21 +129,19 @@ export default function CodeViewer({
         </div>
       )}
 
-      {/* Code Files Section */}
-      <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-        {/* File Tabs (if multiple files) */}
+      <div className="rounded-2xl border border-white/10 bg-slate-950/80 overflow-hidden">
         {files.length > 1 && (
-          <div className="bg-gray-100 border-b border-gray-200 flex overflow-x-auto">
+          <div className="flex overflow-x-auto border-b border-white/10 bg-slate-900/40">
             {files
               .sort((a, b) => a.order - b.order)
               .map((file) => (
                 <button
                   key={file.name}
                   onClick={() => setSelectedFile(file)}
-                  className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${
                     selectedFile?.name === file.name
-                      ? "border-blue-600 text-blue-600 bg-white"
-                      : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+                      ? "border-cyan-400 text-cyan-200"
+                      : "border-transparent text-slate-400 hover:text-white"
                   }`}
                 >
                   {file.name}
@@ -155,32 +150,31 @@ export default function CodeViewer({
           </div>
         )}
 
-        {/* File Info */}
         {selectedFile && (
-          <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-            <div className="flex items-center justify-between">
+          <div className="border-b border-white/5 bg-slate-900/30 px-4 py-3">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="text-sm font-mono text-gray-700">
+                <p className="text-sm font-mono text-slate-200">
                   {selectedFile.name}
-                </div>
+                </p>
                 {selectedFile.description && (
-                  <div className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-slate-400 mt-1">
                     {selectedFile.description}
-                  </div>
+                  </p>
                 )}
               </div>
               <button
                 onClick={handleCopy}
                 disabled={loading || !!error}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-opacity disabled:opacity-40"
               >
                 {copied ? (
                   <>
-                    <span>✓</span> Copied!
+                    <span>✓</span> Copied
                   </>
                 ) : (
                   <>
-                    <span>📋</span> Copy Code
+                    <span>📋</span> Copy code
                   </>
                 )}
               </button>
@@ -188,44 +182,42 @@ export default function CodeViewer({
           </div>
         )}
 
-        {/* Code Display */}
         <div className="relative">
           {loading && (
-            <div className="p-8 text-center text-gray-600">Loading code...</div>
+            <div className="p-8 text-center text-slate-400">Loading code...</div>
           )}
           {error && (
-            <div className="p-8 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="text-yellow-800 mb-2">
-                <strong>⚠️ File Not Available</strong>
-              </div>
-              <div className="text-sm text-yellow-700 mb-4">
-                {error}
-              </div>
-              <div className="text-sm text-yellow-600">
-                <p><strong>Don't worry!</strong> You can still complete this lesson using the instructions below:</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
-                  <li>Check the <strong>Step-by-Step Instructions</strong> section above</li>
-                  <li>Follow the <strong>Execution Steps</strong> for guidance</li>
-                  <li>Review the <strong>Expected Output</strong> to verify your results</li>
+            <div className="p-8 space-y-3 bg-amber-500/10 text-amber-50">
+              <p className="font-semibold text-amber-200 flex items-center gap-2">
+                <span>⚠️</span> File not available
+              </p>
+              <p className="text-sm text-amber-100">{error}</p>
+              <div className="text-sm text-amber-100/80 space-y-1">
+                <p className="font-semibold text-amber-200">
+                  Continue anyway:
+                </p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Follow the instructions and execution steps below.</li>
+                  <li>Check expected output to confirm your solution.</li>
+                  <li>Use the playground to test snippets in the meantime.</li>
                 </ul>
               </div>
             </div>
           )}
           {!loading && !error && code && (
-            <pre className="p-6 overflow-x-auto bg-gray-900 text-gray-100 font-mono text-sm">
+            <pre className="p-6 overflow-x-auto bg-slate-900 text-slate-100 font-mono text-sm">
               <code>{code}</code>
             </pre>
           )}
         </div>
       </div>
 
-      {/* Execution Steps */}
       {executionSteps && executionSteps.length > 0 && (
-        <div className="bg-purple-50 border-l-4 border-purple-400 p-4 rounded">
-          <h3 className="font-semibold text-purple-800 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-purple-400/30 bg-purple-500/10 p-4 text-purple-50">
+          <h3 className="font-semibold text-purple-100 mb-3 flex items-center gap-2">
             <span>⚙️</span> How to Execute
           </h3>
-          <ol className="list-decimal list-inside space-y-2 text-purple-700">
+          <ol className="list-decimal list-inside space-y-2 text-sm">
             {executionSteps.map((step, index) => (
               <li key={index} className="pl-2">
                 {step}
@@ -235,22 +227,20 @@ export default function CodeViewer({
         </div>
       )}
 
-      {/* Expected Output */}
       {expectedOutput && (
-        <div className="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded">
-          <h3 className="font-semibold text-indigo-800 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-indigo-400/30 bg-indigo-500/10 p-4 text-indigo-50">
+          <h3 className="font-semibold text-indigo-100 mb-2 flex items-center gap-2">
             <span>✨</span> Expected Output
           </h3>
-          <p className="text-indigo-700">{expectedOutput}</p>
+          <p className="text-sm">{expectedOutput}</p>
         </div>
       )}
 
-      {/* Tip Section */}
-      <div className="bg-blue-50 border-t border-blue-200 px-6 py-4 rounded-lg">
-        <p className="text-sm text-blue-800">
-          <strong>💡 Tip:</strong> Follow the steps in order, copy the code, and
-          execute as instructed. Make sure you've completed all prerequisites
-          before starting.
+      <div className="rounded-2xl border border-white/10 bg-slate-900/50 px-6 py-4 text-sm text-slate-200">
+        <p>
+          <strong>💡 Tip:</strong> Work through steps sequentially, copy code, and
+          confirm the same commands in your terminal. When errors pop up, capture the
+          exact message and compare your files against the provided ones.
         </p>
       </div>
     </div>

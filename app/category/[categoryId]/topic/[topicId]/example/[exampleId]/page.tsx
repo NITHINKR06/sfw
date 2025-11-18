@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCategory, getExample } from "@/lib/data";
 import type { Topic, CodeExample } from "@/lib/data";
 import CodeViewer from "@/components/CodeViewer";
+import StepNavigator from "@/components/StepNavigator";
 
 interface PageProps {
   params: Promise<{
@@ -86,72 +87,16 @@ export default async function ExamplePage({ params }: PageProps) {
 
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-14">
         <div className="grid gap-8 lg:grid-cols-[320px,1fr] items-start">
-          <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 space-y-6 h-fit shadow-xl shadow-black/40">
-            {/* <div className="space-y-2">
-              <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
-                Step Navigator
-              </p>
-              <h2 className="text-lg font-semibold text-white">
-                Jump to any lesson in this topic
-              </h2>
-              <p className="text-base text-slate-400">
-                Click a step to open it. Use the buttons below when you simply want
-                to march forward or back—no guesswork needed.
-              </p>
-            </div> */}
-            <div className="flex flex-wrap gap-3 mt-2">
-              {prevExample && (
-                <Link
-                  href={`/category/${categoryId}/topic/${topicId}/example/${prevExample.id}`}
-                  className="flex-1 min-w-[140px] rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 hover:text-white transition-colors"
-                >
-                  ← Previous step
-                </Link>
-              )}
-              {nextExample && (
-                <Link
-                  href={`/category/${categoryId}/topic/${topicId}/example/${nextExample.id}`}
-                  className="flex-1 min-w-[140px] rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:text-white transition-colors"
-                >
-                  Next step →
-                </Link>
-              )}
-            </div>
-            <ol className="space-y-3">
-              {allExamples.map((ex) => (
-                <li key={ex.id}>
-                  <Link
-                    href={`/category/${categoryId}/topic/${topicId}/example/${ex.id}`}
-                    className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-colors ${
-                      ex.id === example.id
-                        ? "border-cyan-400/50 bg-cyan-400/10 text-white"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
-                    }`}
-                    aria-current={ex.id === example.id}
-                  >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900/60 text-xs font-semibold text-cyan-200">
-                      {ex.order}
-                    </span>
-                    <div>
-                      <p className="font-semibold leading-tight">{ex.title}</p>
-                      {ex.description && (
-                        <p className="text-xs text-slate-400 line-clamp-2">
-                          {ex.description}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-300 space-y-2">
-              <p className="font-semibold text-slate-200">Navigation tips</p>
-              <ul className="space-y-1 list-disc list-inside">
-                <li>Open steps directly from the list for quick review.</li>
-                <li>Use Previous/Next when progressing in order.</li>
-                <li>Need to practice? Use the topic page&apos;s lab shortcut.</li>
-              </ul>
-            </div>
+          <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 h-fit shadow-xl shadow-black/40">
+            <StepNavigator
+              allExamples={allExamples}
+              currentExampleId={example.id}
+              categoryId={categoryId}
+              topicId={topicId}
+              topicTitle={topic?.title}
+              prevExample={prevExample}
+              nextExample={nextExample}
+            />
           </aside>
           <div className="rounded-3xl border border-white/10 bg-white/5 p-7 shadow-2xl shadow-black/30 min-w-0 relative z-10">
             <CodeViewer

@@ -63,10 +63,11 @@ These sections above contain all the information you need to complete this step.
     const content = fs.readFileSync(normalizedPath, "utf-8");
 
     return NextResponse.json({ content });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error reading file:", error);
+    const errorMessage = error instanceof Error ? error.message : "Failed to read file";
     return NextResponse.json(
-      { error: error.message || "Failed to read file" },
+      { error: errorMessage },
       { status: 500 }
     );
   }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { categories } from "@/lib/data";
+import type { Topic } from "@/lib/data";
 
 export default function Home() {
   return (
@@ -53,8 +54,8 @@ export default function Home() {
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-blue-600 font-medium">
                     {category.topics.length} topic{category.topics.length !== 1 ? "s" : ""} •{" "}
-                    {category.topics.reduce((sum, topic) => sum + topic.examples.length, 0)} step
-                    {category.topics.reduce((sum, topic) => sum + topic.examples.length, 0) !== 1 ? "s" : ""}
+                    {category.topics.reduce((sum: number, topic: Topic) => sum + topic.examples.length, 0)} step
+                    {category.topics.reduce((sum: number, topic: Topic) => sum + topic.examples.length, 0) !== 1 ? "s" : ""}
                   </div>
                   <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
                     Start Learning →

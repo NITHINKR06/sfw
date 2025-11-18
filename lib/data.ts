@@ -1,4 +1,12 @@
-// Re-export types from types file
+// Import types for use in this file
+import type {
+  CodeFile,
+  CodeExample,
+  Topic,
+  Category,
+} from "./data/types";
+
+// Re-export types for external use
 export type {
   CodeFile,
   CodeExample,

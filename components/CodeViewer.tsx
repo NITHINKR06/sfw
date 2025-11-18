@@ -43,11 +43,13 @@ export default function CodeViewer({
   useEffect(() => {
     if (!selectedFile) return;
 
+    const currentFile = selectedFile; // Capture for TypeScript narrowing
     async function fetchCode() {
+      if (!currentFile) return; // Additional check for TypeScript
       try {
         setLoading(true);
         const response = await fetch(
-          `/api/code?path=${encodeURIComponent(selectedFile.filePath)}`
+          `/api/code?path=${encodeURIComponent(currentFile.filePath)}`
         );
         const data = await response.json();
 
@@ -63,8 +65,9 @@ export default function CodeViewer({
 
         setCode(data.content);
         setError(null);
-      } catch (err: any) {
-        setError(err.message || "Failed to load code");
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : "Failed to load code";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

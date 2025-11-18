@@ -86,7 +86,7 @@ export default async function ExamplePage({ params }: PageProps) {
 
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-14">
         <div className="grid gap-8 lg:grid-cols-[320px,1fr] items-start">
-          <aside className="rounded-3xl border border-white/10 bg-slate-950/70 p-6 space-y-6 h-fit sticky top-6">
+          <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 space-y-6 h-fit sticky top-6 shadow-xl shadow-black/40">
             <div className="space-y-2">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                 Step Navigator
@@ -99,7 +99,7 @@ export default async function ExamplePage({ params }: PageProps) {
                 to march forward or back—no guesswork needed.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3 mt-2">
               {prevExample && (
                 <Link
                   href={`/category/${categoryId}/topic/${topicId}/example/${prevExample.id}`}
@@ -117,7 +117,7 @@ export default async function ExamplePage({ params }: PageProps) {
                 </Link>
               )}
             </div>
-            <ol className="space-y-2">
+            <ol className="space-y-3">
               {allExamples.map((ex) => (
                 <li key={ex.id}>
                   <Link
@@ -153,7 +153,7 @@ export default async function ExamplePage({ params }: PageProps) {
               </ul>
             </div>
           </aside>
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-7 shadow-2xl shadow-black/30 min-w-0">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-7 shadow-2xl shadow-black/30 min-w-0 relative z-10">
             <CodeViewer
               files={example.files}
               learningObjectives={example.learningObjectives}

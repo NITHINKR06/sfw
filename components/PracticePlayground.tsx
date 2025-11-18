@@ -70,6 +70,26 @@ export default function PracticePlayground({
   initialTopicId,
   categoryTitle,
 }: PracticePlaygroundProps) {
+  const isLabAvailable = false;
+
+  if (!isLabAvailable) {
+    return (
+      <section
+        id="practice-lab"
+        className="rounded-3xl border border-dashed border-white/20 bg-slate-900/40 p-10 text-center text-slate-200 space-y-4"
+      >
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
+          Practice Lab
+        </p>
+        <h2 className="text-3xl font-semibold text-white">Coming soon</h2>
+        <p className="text-base text-slate-300 max-w-2xl mx-auto">
+          The interactive lab is being upgraded for a better experience. Check back
+          later or continue exploring the roadmap in the meantime.
+        </p>
+      </section>
+    );
+  }
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [currentTab, setCurrentTab] = useState<Language>("html");
   const [code, setCode] = useState<Record<Language, string>>(defaultSnippets);

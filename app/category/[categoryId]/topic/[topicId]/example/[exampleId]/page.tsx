@@ -25,7 +25,7 @@ export default async function ExamplePage({ params }: PageProps) {
 
   // Get previous and next examples for navigation
   const allExamples = topic?.examples.sort((a: CodeExample, b: CodeExample) => a.order - b.order) || [];
-  const currentIndex = allExamples.findIndex((ex) => ex.id === exampleId);
+  const currentIndex = allExamples.findIndex((ex: CodeExample) => ex.id === exampleId);
   const prevExample =
     currentIndex > 0 ? allExamples[currentIndex - 1] : null;
   const nextExample =

@@ -11,12 +11,25 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Resolve the file path relative to the project root
     const projectRoot = process.cwd();
-    const fullPath = path.resolve(projectRoot, filePath);
-    
     // Get the lib directory (where examples are stored)
     const libDir = path.resolve(projectRoot, "lib");
+    
+    // If path starts with "..", it's relative to lib directory (remove the ..)
+    // Otherwise, resolve relative to project root
+    let fullPath: string;
+    if (filePath.startsWith("../")) {
+      // Remove the "../" prefix and resolve relative to lib directory
+      const pathWithoutParent = filePath.replace(/^\.\.\//, "");
+      fullPath = path.resolve(libDir, pathWithoutParent);
+    } else if (filePath.startsWith("lib/")) {
+      // Path already includes lib/, resolve from project root
+      fullPath = path.resolve(projectRoot, filePath);
+    } else {
+      // Assume it's relative to project root
+      fullPath = path.resolve(projectRoot, filePath);
+    }
+    
     const normalizedPath = path.normalize(fullPath);
 
     // Security check: ensure the path is within the lib directory
@@ -27,10 +40,14 @@ export async function GET(request: NextRequest) {
 
     // Additional check: ensure file exists
     if (!fs.existsSync(normalizedPath)) {
-      // For deployment guides and getting started, provide helpful message
-      if (filePath.includes("DEPLOYMENT GUIDES") || filePath.includes("GETTING STARTED")) {
+      // For deployment guides, database guides, and getting started, provide helpful message
+      if (
+        filePath.includes("DEPLOYMENT GUIDES") || 
+        filePath.includes("DATABASE GUIDES") ||
+        filePath.includes("GETTING STARTED")
+      ) {
         const fileName = path.basename(normalizedPath);
-        const placeholderContent = `# ${fileName.replace('.txt', '')}
+        const placeholderContent = `# ${fileName.replace(/\.(txt|js|jsx|ts|tsx|env|example)$/i, '')}
 
 ## File Not Yet Created
 

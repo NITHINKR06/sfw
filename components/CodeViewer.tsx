@@ -1,12 +1,14 @@
 "use client";
 
-import {
+import React, {
   Children,
   useState,
   useEffect,
   useMemo,
   type ComponentPropsWithoutRef,
   type ReactNode,
+  isValidElement,
+  cloneElement,
 } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
@@ -49,6 +51,111 @@ const CONTROL_CHARS_DETECT = /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/;
 
 const stripControlChars = (value: string) =>
   value.replace(CONTROL_CHARS_REGEX, "");
+
+// Pattern to detect commands like npm, npx, node, git, etc.
+// Matches: npm install, npm create vite@latest, npx create-react-app, node server.js, git clone, etc.
+// Matches command followed by arguments until punctuation or end of string
+// Allows @ and . characters in package names and file paths
+const COMMAND_PATTERN = /\b(npm(?:\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*)?|npx(?:\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*)?|node\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*|git\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*|yarn\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*|pnpm\s+[^\s,;:!?\n]+(?:\s+[^\s,;:!?\n]+)*|cd\s+[^\s,;:!?\n]+|mkdir\s+[^\s,;:!?\n]+|echo\s+[^\s,;:!?\n]+|cat\s+[^\s,;:!?\n]+|ls\s+[^\s,;:!?\n]*|curl\s+[^\s,;:!?\n]+|wget\s+[^\s,;:!?\n]+|docker\s+[^\s,;:!?\n]+|python3?\s+[^\s,;:!?\n]+|pip3?\s+[^\s,;:!?\n]+)\b/gi;
+
+const highlightCommandsInText = (text: string): ReactNode[] => {
+  if (typeof text !== "string") return [text];
+
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+
+  // Reset regex lastIndex
+  COMMAND_PATTERN.lastIndex = 0;
+
+  while ((match = COMMAND_PATTERN.exec(text)) !== null) {
+    // Add text before the match
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+
+    // Add the highlighted command
+    parts.push(
+      <code
+        key={`cmd-${match.index}`}
+        className="rounded-md bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-cyan-200"
+      >
+        {match[0]}
+      </code>
+    );
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [text];
+};
+
+const processChildrenForCommands = (children: ReactNode): ReactNode => {
+  if (!children) return children;
+
+  if (typeof children === "string") {
+    const processed = highlightCommandsInText(children);
+    return processed.length === 1 ? processed[0] : <>{processed}</>;
+  }
+
+  if (Array.isArray(children)) {
+    return children.map((child, index) => {
+      if (typeof child === "string") {
+        const processed = highlightCommandsInText(child);
+        return processed.length === 1 ? (
+          processed[0]
+        ) : (
+          <React.Fragment key={index}>{processed}</React.Fragment>
+        );
+      }
+      if (isValidElement(child)) {
+        // Don't process children of code elements or pre elements
+        if (
+          child.type === "code" ||
+          child.type === "pre" ||
+          (typeof child.type === "string" && child.type === "code") ||
+          (child.props as any)?.className?.includes("bg-slate-800")
+        ) {
+          return child;
+        }
+        // Recursively process children of other elements
+        if (child.props?.children !== undefined) {
+          return cloneElement(
+            child,
+            { key: child.key ?? index },
+            processChildrenForCommands(child.props.children)
+          );
+        }
+      }
+      return child;
+    });
+  }
+
+  if (isValidElement(children)) {
+    if (
+      children.type === "code" ||
+      children.type === "pre" ||
+      (typeof children.type === "string" && children.type === "code") ||
+      (children.props as any)?.className?.includes("bg-slate-800")
+    ) {
+      return children;
+    }
+    if (children.props?.children !== undefined) {
+      return cloneElement(
+        children,
+        {},
+        processChildrenForCommands(children.props.children)
+      );
+    }
+  }
+
+  return children;
+};
 
 const LANGUAGE_LABELS: Record<string, string> = {
   bash: "Bash",
@@ -253,14 +360,20 @@ const MarkdownCode = ({
 };
 
 const markdownComponents: Components = {
-  h1: (props) => (
-    <h1 className="text-3xl font-semibold text-white mt-0 mb-4" {...props} />
+  h1: ({ children, ...props }) => (
+    <h1 className="text-3xl font-semibold text-white mt-0 mb-4" {...props}>
+      {processChildrenForCommands(children)}
+    </h1>
   ),
-  h2: (props) => (
-    <h2 className="text-2xl font-semibold text-white mt-6 mb-3" {...props} />
+  h2: ({ children, ...props }) => (
+    <h2 className="text-2xl font-semibold text-white mt-6 mb-3" {...props}>
+      {processChildrenForCommands(children)}
+    </h2>
   ),
-  h3: (props) => (
-    <h3 className="text-xl font-semibold text-white mt-5 mb-2" {...props} />
+  h3: ({ children, ...props }) => (
+    <h3 className="text-xl font-semibold text-white mt-5 mb-2" {...props}>
+      {processChildrenForCommands(children)}
+    </h3>
   ),
   p: ({ node, children, ...props }: MarkdownParagraphProps) => {
     const hasBlockChild =
@@ -274,14 +387,14 @@ const markdownComponents: Components = {
     if (hasBlockChild) {
       return (
         <div className="space-y-4 text-slate-200" {...props}>
-          {children}
+          {processChildrenForCommands(children)}
         </div>
       );
     }
 
     return (
       <p className="text-base leading-relaxed text-slate-200 mb-4" {...props}>
-        {children}
+        {processChildrenForCommands(children)}
       </p>
     );
   },
@@ -291,10 +404,16 @@ const markdownComponents: Components = {
   ol: (props) => (
     <ol className="list-decimal pl-6 space-y-2 text-slate-100 mb-4" {...props} />
   ),
-  li: (props) => <li className="leading-relaxed" {...props} />,
+  li: ({ children, ...props }) => (
+    <li className="leading-relaxed" {...props}>
+      {processChildrenForCommands(children)}
+    </li>
+  ),
   code: MarkdownCode,
-  strong: (props) => (
-    <strong className="text-white font-semibold" {...props} />
+  strong: ({ children, ...props }) => (
+    <strong className="text-white font-semibold" {...props}>
+      {processChildrenForCommands(children)}
+    </strong>
   ),
   a: (props) => (
     <a
@@ -304,11 +423,13 @@ const markdownComponents: Components = {
       {...props}
     />
   ),
-  blockquote: (props) => (
+  blockquote: ({ children, ...props }) => (
     <blockquote
       className="border-l-4 border-cyan-400/60 pl-4 italic text-slate-300 mb-4"
       {...props}
-    />
+    >
+      {processChildrenForCommands(children)}
+    </blockquote>
   ),
 };
 

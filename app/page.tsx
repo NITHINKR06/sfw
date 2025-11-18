@@ -21,22 +21,22 @@ export default function Home() {
   return (
     <div className="min-h-screen text-slate-100">
       <header className="border-b border-white/5 bg-gradient-to-b from-slate-900/80 via-slate-950 to-slate-950">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-20">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.15),_transparent_55%)]" />
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">
+          <div className="flex flex-col gap-10 xl:flex-row xl:items-center xl:justify-between">
+            <div className="space-y-5 max-w-3xl">
+              <p className="text-sm uppercase tracking-[0.3em] text-cyan-200">
                 Code Learning Hub
               </p>
-              <h1 className="text-4xl sm:text-5xl font-semibold leading-tight text-white">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-white">
                 A full-stack roadmap with hands-on practice built in.
               </h1>
-              <p className="text-base text-slate-300 max-w-2xl">
+              <p className="text-lg text-slate-200">
                 Every category contains prerequisites, detailed steps, runnable code,
                 and a practice playground on the same page. Follow it from zero setup
                 to production deployment without hunting for missing context.
               </p>
-              <div className="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-wide text-slate-300">
+              <div className="flex flex-wrap gap-3 text-sm font-semibold uppercase tracking-wide text-slate-200">
                 <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2">
                   Guided steps
                 </span>
@@ -48,50 +48,50 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+            <div className="grid w-full max-w-xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-1">
+              <article className="flex flex-col rounded-3xl border border-white/10 bg-white/5 px-6 py-6 backdrop-blur">
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                   Tracks
                 </p>
-                <p className="text-4xl font-semibold text-white">{sortedCategories.length}</p>
-                <p className="text-sm text-slate-300">Complete learning journeys</p>
+                <p className="mt-2 text-5xl font-semibold text-white">{sortedCategories.length}</p>
+                <p className="text-base text-slate-300">Complete learning journeys</p>
               </article>
-              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+              <article className="flex flex-col rounded-3xl border border-white/10 bg-white/5 px-6 py-6 backdrop-blur">
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                   Topics
                 </p>
-                <p className="text-4xl font-semibold text-white">{totalTopics}</p>
-                <p className="text-sm text-slate-300">Milestones with checkpoints</p>
+                <p className="mt-2 text-5xl font-semibold text-white">{totalTopics}</p>
+                <p className="text-base text-slate-300">Milestones with checkpoints</p>
               </article>
-              <article className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+              <article className="flex flex-col rounded-3xl border border-white/10 bg-white/5 px-6 py-6 backdrop-blur">
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                   Steps
                 </p>
-                <p className="text-4xl font-semibold text-white">{totalSteps}</p>
-                <p className="text-sm text-slate-300">Actionable lessons</p>
+                <p className="mt-2 text-5xl font-semibold text-white">{totalSteps}</p>
+                <p className="text-base text-slate-300">Actionable lessons</p>
               </article>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-        <section className="space-y-4">
+      <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-20 space-y-16">
+        <section className="space-y-6">
           <div className="flex flex-col gap-2">
-            <p className="text-xs uppercase tracking-[0.4em] text-cyan-300">
+            <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
               Choose a path
             </p>
-            <h2 className="text-3xl font-semibold text-white">
+            <h2 className="text-4xl font-semibold text-white">
               Pick the category that matches your next goal
             </h2>
-            <p className="text-sm text-slate-300 max-w-3xl">
+            <p className="text-base text-slate-300 max-w-3xl">
               Each card lists prerequisites, total guided steps, and the skills you
               will master. Click through to view the full roadmap plus an embedded
               code runner for instant practice.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
             {sortedCategories.map((category) => {
               const totalExamples = category.topics.reduce(
                 (sum: number, topic: Topic) => sum + topic.examples.length,
@@ -102,27 +102,27 @@ export default function Home() {
                 <Link
                   key={category.id}
                   href={`/category/${category.id}`}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-950 to-slate-950 p-6 shadow-xl shadow-black/30 transition-transform hover:-translate-y-1 hover:shadow-cyan-500/20"
+                  className="group relative flex min-h-[320px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-950 to-slate-950 p-8 shadow-xl shadow-black/30 transition-transform hover:-translate-y-1 hover:shadow-cyan-500/20"
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.2),_transparent_55%)]" />
-                  <div className="relative flex items-center gap-4 mb-4">
+                  <div className="relative flex items-center gap-4 mb-6">
                     <span className="text-4xl drop-shadow">{category.icon}</span>
                     <div>
                       <h3 className="text-2xl font-semibold text-white">
                         {category.title}
                       </h3>
-                      <p className="text-xs uppercase tracking-[0.4em] text-cyan-200">
+                      <p className="text-sm uppercase tracking-[0.3em] text-cyan-200">
                         {category.topics.length} topic
                         {category.topics.length === 1 ? "" : "s"}
                       </p>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-300 mb-4 min-h-[70px]">
+                  <p className="text-base text-slate-300 mb-4 min-h-[84px]">
                     {category.description}
                   </p>
 
                   {category.prerequisites && category.prerequisites.length > 0 && (
-                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-slate-300">
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
                       <p className="font-semibold text-slate-200 mb-1">
                         Key prerequisites
                       </p>
@@ -133,13 +133,13 @@ export default function Home() {
                     </div>
                   )}
 
-                  <div className="relative flex items-center justify-between text-xs text-slate-400">
+                  <div className="relative mt-auto flex items-center justify-between text-sm text-slate-300">
                     <span>
                       {category.topics.length} topic
                       {category.topics.length === 1 ? "" : "s"} • {totalExamples} step
                       {totalExamples === 1 ? "" : "s"}
                     </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/20 px-3 py-1 text-cyan-200 font-semibold">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-cyan-400/20 px-3 py-1 text-cyan-100 font-semibold">
                       Start learning →
                     </span>
                   </div>
@@ -149,30 +149,30 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-8 space-y-6">
-          <h2 className="text-2xl font-semibold text-white">
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-10 space-y-8">
+          <h2 className="text-3xl font-semibold text-white">
             Built for frictionless learning
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <p className="text-sm font-semibold text-cyan-200">Actionable steps</p>
-              <p className="text-sm text-slate-300 mt-2">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-6 space-y-3">
+              <p className="text-base font-semibold text-cyan-200">Actionable steps</p>
+              <p className="text-base text-slate-300">
                 Every lesson includes objectives, prerequisites, commands, and expected
                 output so you never guess what to do next.
               </p>
             </article>
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <p className="text-sm font-semibold text-cyan-200">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-6 space-y-3">
+              <p className="text-base font-semibold text-cyan-200">
                 Embedded code runner
               </p>
-              <p className="text-sm text-slate-300 mt-2">
+              <p className="text-base text-slate-300">
                 Practice HTML, CSS, JavaScript, and TypeScript right on the page. Logs
                 and errors show up instantly with friendly hints.
               </p>
             </article>
-            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-              <p className="text-sm font-semibold text-cyan-200">Progress-aware</p>
-              <p className="text-sm text-slate-300 mt-2">
+            <article className="rounded-2xl border border-white/10 bg-slate-950/60 p-6 space-y-3">
+              <p className="text-base font-semibold text-cyan-200">Progress-aware</p>
+              <p className="text-base text-slate-300">
                 Topic pages show process overviews, verify-your-work checklists, and
                 commands to re-run whenever something fails.
               </p>
@@ -182,7 +182,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-white/5 bg-slate-950/70">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-slate-400">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-10 text-center text-sm text-slate-400">
           © {new Date().getFullYear()} Code Learning Hub. Keep building confidently.
         </div>
       </footer>

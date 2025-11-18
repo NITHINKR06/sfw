@@ -43,8 +43,14 @@ body {
   margin: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  font-size: clamp(15px, 0.8vw + 14px, 18px);
+}
+
 body {
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 a {

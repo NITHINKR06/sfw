@@ -89,11 +89,11 @@ export default function CodeViewer({
   return (
     <div className="space-y-6">
       {prerequisites && prerequisites.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-50">
-          <h3 className="font-semibold text-amber-200 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 text-amber-50 space-y-2">
+          <h3 className="font-semibold text-amber-200 flex items-center gap-2 text-lg">
             <span>📋</span> Prerequisites
           </h3>
-          <ul className="list-disc list-inside space-y-1 text-sm">
+          <ul className="list-disc list-inside space-y-1 text-base">
             {prerequisites.map((prereq, index) => (
               <li key={index}>{prereq}</li>
             ))}
@@ -102,11 +102,11 @@ export default function CodeViewer({
       )}
 
       {learningObjectives && learningObjectives.length > 0 && (
-        <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 text-cyan-50">
-          <h3 className="font-semibold text-cyan-200 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-5 text-cyan-50 space-y-2">
+          <h3 className="font-semibold text-cyan-200 flex items-center gap-2 text-lg">
             <span>🎯</span> Learning Objectives
           </h3>
-          <ul className="list-disc list-inside space-y-1 text-sm">
+          <ul className="list-disc list-inside space-y-1 text-base">
             {learningObjectives.map((objective, index) => (
               <li key={index}>{objective}</li>
             ))}
@@ -115,11 +115,11 @@ export default function CodeViewer({
       )}
 
       {steps && steps.length > 0 && (
-        <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-emerald-50">
-          <h3 className="font-semibold text-emerald-200 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-5 text-emerald-50 space-y-3">
+          <h3 className="font-semibold text-emerald-200 flex items-center gap-2 text-lg">
             <span>📝</span> Step-by-Step Instructions
           </h3>
-          <ol className="list-decimal list-inside space-y-2 text-sm">
+          <ol className="list-decimal list-inside space-y-2 text-base">
             {steps.map((step, index) => (
               <li key={index} className="pl-2">
                 {step}
@@ -129,7 +129,7 @@ export default function CodeViewer({
         </div>
       )}
 
-      <div className="rounded-2xl border border-white/10 bg-slate-950/80 overflow-hidden">
+      <div className="rounded-3xl border border-white/10 bg-slate-950/80 overflow-hidden">
         {files.length > 1 && (
           <div className="flex overflow-x-auto border-b border-white/10 bg-slate-900/40">
             {files
@@ -138,7 +138,7 @@ export default function CodeViewer({
                 <button
                   key={file.name}
                   onClick={() => setSelectedFile(file)}
-                  className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${
+                  className={`px-5 py-3 text-base font-semibold whitespace-nowrap border-b-2 transition-colors ${
                     selectedFile?.name === file.name
                       ? "border-cyan-400 text-cyan-200"
                       : "border-transparent text-slate-400 hover:text-white"
@@ -151,8 +151,8 @@ export default function CodeViewer({
         )}
 
         {selectedFile && (
-          <div className="border-b border-white/5 bg-slate-900/30 px-4 py-3">
-            <div className="flex items-center justify-between gap-4">
+          <div className="border-b border-white/5 bg-slate-900/30 px-5 py-4">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
               <div>
                 <p className="text-sm font-mono text-slate-200">
                   {selectedFile.name}
@@ -166,7 +166,7 @@ export default function CodeViewer({
               <button
                 onClick={handleCopy}
                 disabled={loading || !!error}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-opacity disabled:opacity-40"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-opacity disabled:opacity-40"
               >
                 {copied ? (
                   <>
@@ -205,7 +205,7 @@ export default function CodeViewer({
             </div>
           )}
           {!loading && !error && code && (
-            <pre className="p-6 overflow-x-auto bg-slate-900 text-slate-100 font-mono text-sm">
+            <pre className="p-6 overflow-x-auto bg-slate-900 text-slate-100 font-mono text-base leading-relaxed">
               <code>{code}</code>
             </pre>
           )}
@@ -213,11 +213,11 @@ export default function CodeViewer({
       </div>
 
       {executionSteps && executionSteps.length > 0 && (
-        <div className="rounded-2xl border border-purple-400/30 bg-purple-500/10 p-4 text-purple-50">
-          <h3 className="font-semibold text-purple-100 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-purple-400/30 bg-purple-500/10 p-5 text-purple-50 space-y-3">
+          <h3 className="font-semibold text-purple-100 flex items-center gap-2 text-lg">
             <span>⚙️</span> How to Execute
           </h3>
-          <ol className="list-decimal list-inside space-y-2 text-sm">
+          <ol className="list-decimal list-inside space-y-2 text-base">
             {executionSteps.map((step, index) => (
               <li key={index} className="pl-2">
                 {step}
@@ -228,15 +228,15 @@ export default function CodeViewer({
       )}
 
       {expectedOutput && (
-        <div className="rounded-2xl border border-indigo-400/30 bg-indigo-500/10 p-4 text-indigo-50">
-          <h3 className="font-semibold text-indigo-100 mb-2 flex items-center gap-2">
+        <div className="rounded-2xl border border-indigo-400/30 bg-indigo-500/10 p-5 text-indigo-50 space-y-2">
+          <h3 className="font-semibold text-indigo-100 flex items-center gap-2 text-lg">
             <span>✨</span> Expected Output
           </h3>
-          <p className="text-sm">{expectedOutput}</p>
+          <p className="text-base">{expectedOutput}</p>
         </div>
       )}
 
-      <div className="rounded-2xl border border-white/10 bg-slate-900/50 px-6 py-4 text-sm text-slate-200">
+      <div className="rounded-2xl border border-white/10 bg-slate-900/50 px-6 py-4 text-base text-slate-200">
         <p>
           <strong>💡 Tip:</strong> Work through steps sequentially, copy code, and
           confirm the same commands in your terminal. When errors pop up, capture the

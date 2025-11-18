@@ -237,23 +237,23 @@ export default function PracticePlayground({
   return (
     <section
       id="practice-lab"
-      className="bg-slate-900/50 border border-white/10 rounded-2xl p-8 text-slate-100"
+      className="bg-slate-900/50 border border-white/10 rounded-3xl p-8 md:p-10 text-slate-100 space-y-8"
     >
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-cyan-300">
+          <p className="text-sm uppercase tracking-[0.25em] text-cyan-300">
             Practice Lab
           </p>
-          <h2 className="text-3xl font-semibold mt-1">
+          <h2 className="text-3xl md:text-4xl font-semibold mt-2">
             Run HTML, CSS, JavaScript, or TypeScript instantly
           </h2>
-          <p className="text-sm text-slate-300 mt-2 max-w-3xl">
+          <p className="text-base text-slate-300 mt-3 max-w-3xl">
             Use the in-browser sandbox to validate the steps you just read.
             Every run shows live output, console logs, and friendly guidance if
             something breaks.
           </p>
           {topics && topics.length > 0 && (
-            <p className="text-xs text-slate-400 mt-2">
+            <p className="text-sm text-slate-400 mt-3">
               Currently focused on:{" "}
               <span className="text-cyan-200 font-semibold">
                 {currentTopic?.title ?? "General practice"}
@@ -265,14 +265,14 @@ export default function PracticePlayground({
         <div className="flex gap-2">
           <button
             onClick={runCode}
-            className="inline-flex items-center gap-2 rounded-xl bg-cyan-400/20 px-4 py-2 font-semibold text-cyan-200 hover:bg-cyan-400/30 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-cyan-400/20 px-5 py-2 text-base font-semibold text-cyan-200 hover:bg-cyan-400/30 transition-colors disabled:opacity-50"
             disabled={isRunning}
           >
             {isRunning ? "Running..." : "▶ Run code"}
           </button>
           <button
             onClick={resetEditors}
-            className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 font-semibold text-slate-200 hover:bg-white/20 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-5 py-2 text-base font-semibold text-slate-200 hover:bg-white/20 transition-colors"
           >
             Reset
           </button>
@@ -280,7 +280,7 @@ export default function PracticePlayground({
       </div>
 
       {topics && topics.length > 0 && (
-        <div className="mt-6 flex flex-col gap-3">
+        <div className="mt-2 flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             Focus by topic
           </p>
@@ -289,7 +289,7 @@ export default function PracticePlayground({
               <button
                 key={topic.id}
                 onClick={() => setSelectedTopicId(topic.id)}
-                className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
+                className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
                   selectedTopicId === topic.id
                     ? "border-cyan-400/60 bg-cyan-400/20 text-cyan-100"
                     : "border-white/10 text-slate-300 hover:border-cyan-400/40 hover:text-white"
@@ -302,8 +302,8 @@ export default function PracticePlayground({
         </div>
       )}
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="bg-slate-950/60 rounded-2xl border border-white/5">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        <div className="bg-slate-950/60 rounded-2xl border border-white/5 min-w-0">
           <div className="flex overflow-x-auto border-b border-white/5">
             {editorTabs.map((tab) => (
               <button
@@ -320,13 +320,15 @@ export default function PracticePlayground({
             ))}
           </div>
 
-          <textarea
-            value={code[currentTab]}
-            onChange={(event) => updateCode(event.target.value)}
-            spellCheck={false}
-            className="w-full h-72 bg-transparent p-4 font-mono text-sm resize-none text-slate-100 focus:outline-none"
-            placeholder={`Write your ${currentTab.toUpperCase()} snippet here...`}
-          />
+          <div className="min-w-0">
+            <textarea
+              value={code[currentTab]}
+              onChange={(event) => updateCode(event.target.value)}
+              spellCheck={false}
+              className="w-full h-80 md:h-96 bg-transparent p-4 font-mono text-sm resize-none text-slate-100 focus:outline-none"
+              placeholder={`Write your ${currentTab.toUpperCase()} snippet here...`}
+            />
+          </div>
 
           {showTsWarning && (
             <div className="mx-4 mb-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">
@@ -336,8 +338,8 @@ export default function PracticePlayground({
           )}
         </div>
 
-        <div className="space-y-4">
-          <div className="h-72 rounded-2xl border border-white/5 bg-slate-950/40 overflow-hidden">
+        <div className="space-y-4 min-w-0">
+          <div className="h-80 md:h-96 rounded-2xl border border-white/5 bg-slate-950/40 overflow-hidden">
             <iframe
               ref={iframeRef}
               title="Practice output"
@@ -345,11 +347,11 @@ export default function PracticePlayground({
               sandbox="allow-scripts allow-same-origin"
             />
           </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-950/40 p-4">
+          <div className="rounded-2xl border border-white/5 bg-slate-950/40 p-5">
             <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wide">
               Console & Feedback
             </h3>
-            <div className="mt-3 space-y-2 font-mono text-xs text-slate-300 max-h-48 overflow-y-auto">
+            <div className="mt-3 space-y-2 font-mono text-xs text-slate-300 max-h-56 overflow-y-auto">
               {consoleLogs.length === 0 && !runtimeError && (
                 <p className="text-slate-500">
                   Console output will appear here. Use <code>console.log()</code>{" "}
@@ -366,7 +368,7 @@ export default function PracticePlayground({
               )}
             </div>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-950/40 p-4">
+          <div className="rounded-2xl border border-white/5 bg-slate-950/40 p-5">
             <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wide mb-2">
               How to debug quickly
             </h3>

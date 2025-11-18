@@ -44,7 +44,7 @@ export const expressCategory: Category = {
             "Run: npm install express",
             "Copy code to server.js",
             "Run: node server.js",
-            "Open: http://localhost:3000",
+            "Open: [http://localhost:3000](http://localhost:3000)",
           ],
           expectedOutput: "Server running and 'Hello from Express.js!' displayed",
           order: 1,
@@ -75,7 +75,7 @@ export const expressCategory: Category = {
           executionSteps: [
             "Copy code to server.js",
             "Run: node server.js",
-            "Test GET: http://localhost:3000",
+            "Test GET: [http://localhost:3000](http://localhost:3000)",
             "Test POST using Postman or curl",
           ],
           expectedOutput: "Both GET and POST routes work correctly",
@@ -144,7 +144,7 @@ export const expressCategory: Category = {
           executionSteps: [
             "Copy code to server.js",
             "Run: node server.js",
-            "Visit: http://localhost:3000/user/123",
+            "Visit: [http://localhost:3000/user/123](http://localhost:3000/user/123)",
           ],
           expectedOutput: "User ID extracted from URL and displayed",
           order: 4,
@@ -174,7 +174,7 @@ export const expressCategory: Category = {
           executionSteps: [
             "Copy code to server.js",
             "Run: node server.js",
-            "Visit: http://localhost:3000/search?q=nodejs&page=1",
+            "Visit: [http://localhost:3000/search?q=nodejs&page=1](http://localhost:3000/search?q=nodejs&page=1)",
           ],
           expectedOutput: "Query parameters extracted and displayed",
           order: 5,

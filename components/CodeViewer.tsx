@@ -1,6 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 
 interface CodeFile {
   name: string;
@@ -16,7 +24,70 @@ interface CodeViewerProps {
   steps?: string[];
   executionSteps?: string[];
   expectedOutput?: string;
+  exampleTitle?: string;
+  exampleDescription?: string;
 }
+
+type MarkdownCodeProps = ComponentPropsWithoutRef<"code"> & {
+  inline?: boolean;
+  children?: ReactNode;
+};
+
+const codeComponent = ({ inline, className, children, ...props }: MarkdownCodeProps) =>
+  inline ? (
+    <code
+      className="rounded-md bg-slate-800 px-1.5 py-0.5 font-mono text-sm text-cyan-200"
+      {...props}
+    >
+      {children}
+    </code>
+  ) : (
+    <pre className="bg-slate-900 border border-white/5 rounded-xl p-4 overflow-auto text-sm text-slate-100">
+      <code {...props} className={className}>
+        {children}
+      </code>
+    </pre>
+  );
+
+const markdownComponents: Components = {
+  h1: (props) => (
+    <h1 className="text-3xl font-semibold text-white mt-0 mb-4" {...props} />
+  ),
+  h2: (props) => (
+    <h2 className="text-2xl font-semibold text-white mt-6 mb-3" {...props} />
+  ),
+  h3: (props) => (
+    <h3 className="text-xl font-semibold text-white mt-5 mb-2" {...props} />
+  ),
+  p: (props) => (
+    <p className="text-base leading-relaxed text-slate-200 mb-4" {...props} />
+  ),
+  ul: (props) => (
+    <ul className="list-disc pl-6 space-y-2 text-slate-100 mb-4" {...props} />
+  ),
+  ol: (props) => (
+    <ol className="list-decimal pl-6 space-y-2 text-slate-100 mb-4" {...props} />
+  ),
+  li: (props) => <li className="leading-relaxed" {...props} />,
+  code: codeComponent,
+  strong: (props) => (
+    <strong className="text-white font-semibold" {...props} />
+  ),
+  a: (props) => (
+    <a
+      className="text-cyan-300 underline underline-offset-4 hover:text-cyan-200"
+      target="_blank"
+      rel="noreferrer"
+      {...props}
+    />
+  ),
+  blockquote: (props) => (
+    <blockquote
+      className="border-l-4 border-cyan-400/60 pl-4 italic text-slate-300 mb-4"
+      {...props}
+    />
+  ),
+};
 
 export default function CodeViewer({
   files,
@@ -25,25 +96,93 @@ export default function CodeViewer({
   steps,
   executionSteps,
   expectedOutput,
+  exampleTitle,
+  exampleDescription,
 }: CodeViewerProps) {
   const [selectedFile, setSelectedFile] = useState<CodeFile | null>(null);
   const [code, setCode] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [previewMarkdown, setPreviewMarkdown] = useState(false);
+
+  const generatedGuide = useMemo(() => {
+    const sections: string[] = [];
+    const heading =
+      exampleTitle ||
+      files[0]?.name?.replace(/\.[^/.]+$/, "") ||
+      "Lesson Guide";
+
+    sections.push(`# ${heading}`);
+
+    if (exampleDescription) {
+      sections.push(exampleDescription);
+    }
+
+    if (prerequisites && prerequisites.length > 0) {
+      sections.push(
+        `## Prerequisites\n${prerequisites.map((item) => `- ${item}`).join("\n")}`
+      );
+    }
+
+    if (learningObjectives && learningObjectives.length > 0) {
+      sections.push(
+        `## Learning objectives\n${learningObjectives
+          .map((item) => `- ${item}`)
+          .join("\n")}`
+      );
+    }
+
+    if (steps && steps.length > 0) {
+      sections.push(
+        `## Step-by-step instructions\n${steps
+          .map((item, index) => `${index + 1}. ${item}`)
+          .join("\n")}`
+      );
+    }
+
+    if (executionSteps && executionSteps.length > 0) {
+      sections.push(
+        `## How to execute\n${executionSteps
+          .map((item, index) => `${index + 1}. ${item}`)
+          .join("\n")}`
+      );
+    }
+
+    if (expectedOutput) {
+      sections.push(`## Expected output\n${expectedOutput}`);
+    }
+
+    if (sections.length === 1 && sections[0].trim() === `# ${heading}`) {
+      return "";
+    }
+
+    return sections.join("\n\n");
+  }, [
+    exampleTitle,
+    exampleDescription,
+    prerequisites,
+    learningObjectives,
+    steps,
+    executionSteps,
+    expectedOutput,
+    files,
+  ]);
 
   // Set first file as selected by default
   useEffect(() => {
-    if (files.length > 0 && !selectedFile) {
-      setSelectedFile(files[0]);
+    if (files.length > 0) {
+      setSelectedFile((prev) => prev ?? files[0]);
     }
-  }, [files, selectedFile]);
+  }, [files]);
 
   // Fetch code when selected file changes
   useEffect(() => {
     if (!selectedFile) return;
 
     const currentFile = selectedFile; // Capture for TypeScript narrowing
+    const fileLooksMarkdown = currentFile.name.toLowerCase().endsWith(".md");
+
     async function fetchCode() {
       if (!currentFile) return; // Additional check for TypeScript
       try {
@@ -53,28 +192,45 @@ export default function CodeViewer({
         );
         const data = await response.json();
 
-        if (!response.ok) {
-          // If we get placeholder content (for deployment guides), show it
-          if (data.isPlaceholder && data.content) {
+        const hasGuide = generatedGuide && generatedGuide.trim().length > 0;
+
+        if (data.isPlaceholder) {
+          if (hasGuide) {
+            setCode(generatedGuide);
+          } else {
             setCode(data.content);
-            setError(null);
-            return;
           }
+          setPreviewMarkdown(true);
+          setError(null);
+          return;
+        }
+
+        if (!response.ok) {
           throw new Error(data.error || data.hint || "Failed to load code");
         }
 
         setCode(data.content);
+        setPreviewMarkdown(fileLooksMarkdown);
         setError(null);
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to load code";
-        setError(errorMessage);
+        const hasGuide = generatedGuide && generatedGuide.trim().length > 0;
+        if (hasGuide) {
+          setCode(generatedGuide);
+          setPreviewMarkdown(true);
+          setError(null);
+        } else {
+          const errorMessage =
+            err instanceof Error ? err.message : "Failed to load code";
+          setPreviewMarkdown(false);
+          setError(errorMessage);
+        }
       } finally {
         setLoading(false);
       }
     }
 
     fetchCode();
-  }, [selectedFile]);
+  }, [selectedFile, generatedGuide]);
 
   const handleCopy = async () => {
     try {
@@ -88,47 +244,6 @@ export default function CodeViewer({
 
   return (
     <div className="space-y-6">
-      {prerequisites && prerequisites.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 text-amber-50 space-y-2">
-          <h3 className="font-semibold text-amber-200 flex items-center gap-2 text-lg">
-            <span>📋</span> Prerequisites
-          </h3>
-          <ul className="list-disc list-inside space-y-1 text-base">
-            {prerequisites.map((prereq, index) => (
-              <li key={index}>{prereq}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {learningObjectives && learningObjectives.length > 0 && (
-        <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-5 text-cyan-50 space-y-2">
-          <h3 className="font-semibold text-cyan-200 flex items-center gap-2 text-lg">
-            <span>🎯</span> Learning Objectives
-          </h3>
-          <ul className="list-disc list-inside space-y-1 text-base">
-            {learningObjectives.map((objective, index) => (
-              <li key={index}>{objective}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {steps && steps.length > 0 && (
-        <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-5 text-emerald-50 space-y-3">
-          <h3 className="font-semibold text-emerald-200 flex items-center gap-2 text-lg">
-            <span>📝</span> Step-by-Step Instructions
-          </h3>
-          <ol className="list-decimal list-inside space-y-2 text-base">
-            {steps.map((step, index) => (
-              <li key={index} className="pl-2">
-                {step}
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
       <div className="rounded-3xl border border-white/10 bg-slate-950/80 overflow-hidden">
         {files.length > 1 && (
           <div className="flex overflow-x-auto border-b border-white/10 bg-slate-900/40">
@@ -166,7 +281,7 @@ export default function CodeViewer({
               <button
                 onClick={handleCopy}
                 disabled={loading || !!error}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-opacity disabled:opacity-40"
+                className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-cyan-400 to-blue-500 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg transition-opacity disabled:opacity-40"
               >
                 {copied ? (
                   <>
@@ -205,36 +320,20 @@ export default function CodeViewer({
             </div>
           )}
           {!loading && !error && code && (
-            <pre className="p-6 overflow-x-auto bg-slate-900 text-slate-100 font-mono text-base leading-relaxed">
-              <code>{code}</code>
-            </pre>
+            <>
+              {previewMarkdown ? (
+                <article className="px-6 py-6 bg-slate-900 text-slate-100 space-y-4">
+                  <ReactMarkdown components={markdownComponents}>{code}</ReactMarkdown>
+                </article>
+              ) : (
+                <pre className="p-6 overflow-x-auto bg-slate-900 text-slate-100 font-mono text-base leading-relaxed">
+                  <code>{code}</code>
+                </pre>
+              )}
+            </>
           )}
         </div>
       </div>
-
-      {executionSteps && executionSteps.length > 0 && (
-        <div className="rounded-2xl border border-purple-400/30 bg-purple-500/10 p-5 text-purple-50 space-y-3">
-          <h3 className="font-semibold text-purple-100 flex items-center gap-2 text-lg">
-            <span>⚙️</span> How to Execute
-          </h3>
-          <ol className="list-decimal list-inside space-y-2 text-base">
-            {executionSteps.map((step, index) => (
-              <li key={index} className="pl-2">
-                {step}
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
-      {expectedOutput && (
-        <div className="rounded-2xl border border-indigo-400/30 bg-indigo-500/10 p-5 text-indigo-50 space-y-2">
-          <h3 className="font-semibold text-indigo-100 flex items-center gap-2 text-lg">
-            <span>✨</span> Expected Output
-          </h3>
-          <p className="text-base">{expectedOutput}</p>
-        </div>
-      )}
 
       <div className="rounded-2xl border border-white/10 bg-slate-900/50 px-6 py-4 text-base text-slate-200">
         <p>

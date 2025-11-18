@@ -36,7 +36,7 @@ export default async function ExamplePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="border-b border-white/10 bg-gradient-to-b from-slate-900/80 via-slate-950 to-slate-950">
+      <header className="border-b border-white/10 bg-linear-to-b from-slate-900/80 via-slate-950 to-slate-950">
         <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-12 space-y-6">
           <div className="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.4em] text-slate-400">
             <Link href="/" className="hover:text-white transition-colors">
@@ -75,7 +75,7 @@ export default async function ExamplePage({ params }: PageProps) {
               </p>
               <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all"
+                  className="h-full rounded-full bg-linear-to-r from-cyan-400 to-blue-500 transition-all"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -87,7 +87,7 @@ export default async function ExamplePage({ params }: PageProps) {
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-14">
         <div className="grid gap-8 lg:grid-cols-[320px,1fr] items-start">
           <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 space-y-6 h-fit shadow-xl shadow-black/40">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                 Step Navigator
               </p>
@@ -98,7 +98,7 @@ export default async function ExamplePage({ params }: PageProps) {
                 Click a step to open it. Use the buttons below when you simply want
                 to march forward or back—no guesswork needed.
               </p>
-            </div>
+            </div> */}
             <div className="flex flex-wrap gap-3 mt-2">
               {prevExample && (
                 <Link
@@ -161,6 +161,8 @@ export default async function ExamplePage({ params }: PageProps) {
               steps={example.steps}
               executionSteps={example.executionSteps}
               expectedOutput={example.expectedOutput}
+              exampleTitle={example.title}
+              exampleDescription={example.description}
             />
           </div>
         </div>
@@ -182,7 +184,7 @@ export default async function ExamplePage({ params }: PageProps) {
           {nextExample ? (
             <Link
               href={`/category/${categoryId}/topic/${topicId}/example/${nextExample.id}`}
-              className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 text-base font-semibold text-slate-900 shadow-lg hover:shadow-cyan-500/40 transition-shadow"
+              className="inline-flex items-center gap-3 rounded-2xl bg-linear-to-r from-cyan-400 to-blue-500 px-5 py-3 text-base font-semibold text-slate-900 shadow-lg hover:shadow-cyan-500/40 transition-shadow"
             >
               Next: {nextExample.title} →
             </Link>

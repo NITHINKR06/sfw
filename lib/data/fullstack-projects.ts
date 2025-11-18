@@ -54,7 +54,7 @@ export const fullstackProjectsCategory: Category = {
             "Create routes for GET, POST, PUT, DELETE",
             "Test API with Postman",
           ],
-          expectedOutput: "Backend API running on http://localhost:5000",
+          expectedOutput: "Backend API running on [http://localhost:5000](http://localhost:5000)",
           order: 1,
         },
         {

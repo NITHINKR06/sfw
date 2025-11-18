@@ -191,7 +191,7 @@ export const nodejsCategory: Category = {
           executionSteps: [
             "Copy code to Program6.js",
             "Run: node Program6.js",
-            "Open browser: http://localhost:3000",
+            "Open browser: [http://localhost:3000](http://localhost:3000)",
           ],
           expectedOutput: "Server running and responding to requests",
           order: 6,

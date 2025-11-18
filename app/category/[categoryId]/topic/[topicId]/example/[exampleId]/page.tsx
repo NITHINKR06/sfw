@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getExample } from "@/lib/data";
+import type { Topic, CodeExample } from "@/lib/data";
 import CodeViewer from "@/components/CodeViewer";
 
 interface PageProps {
@@ -20,10 +21,10 @@ export default async function ExamplePage({ params }: PageProps) {
     notFound();
   }
 
-  const topic = category.topics.find((t) => t.id === topicId);
+  const topic = category.topics.find((t: Topic) => t.id === topicId);
 
   // Get previous and next examples for navigation
-  const allExamples = topic?.examples.sort((a, b) => a.order - b.order) || [];
+  const allExamples = topic?.examples.sort((a: CodeExample, b: CodeExample) => a.order - b.order) || [];
   const currentIndex = allExamples.findIndex((ex) => ex.id === exampleId);
   const prevExample =
     currentIndex > 0 ? allExamples[currentIndex - 1] : null;

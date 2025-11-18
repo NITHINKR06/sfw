@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory } from "@/lib/data";
+import type { Topic, CodeExample } from "@/lib/data";
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
@@ -43,7 +44,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <span>📋</span> Prerequisites for {category.title}
             </h3>
             <ul className="list-disc list-inside text-yellow-700 space-y-1">
-              {category.prerequisites.map((prereq, index) => (
+              {category.prerequisites.map((prereq: string, index: number) => (
                 <li key={index}>{prereq}</li>
               ))}
             </ul>
@@ -55,8 +56,8 @@ export default async function CategoryPage({ params }: PageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           {category.topics
-            .sort((a, b) => a.order - b.order)
-            .map((topic) => (
+            .sort((a: Topic, b: Topic) => a.order - b.order)
+            .map((topic: Topic) => (
               <div
                 key={topic.id}
                 className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
@@ -88,8 +89,8 @@ export default async function CategoryPage({ params }: PageProps) {
                 {/* Examples as Steps */}
                 <div className="space-y-3 mt-4">
                   {topic.examples
-                    .sort((a, b) => a.order - b.order)
-                    .map((example, index) => (
+                    .sort((a: CodeExample, b: CodeExample) => a.order - b.order)
+                    .map((example: CodeExample, index: number) => (
                       <Link
                         key={example.id}
                         href={`/category/${categoryId}/topic/${topic.id}/example/${example.id}`}

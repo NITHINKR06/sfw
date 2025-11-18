@@ -20,7 +20,8 @@ import { fullstackProjectsCategory } from "./data/fullstack-projects";
 import { deploymentCategory } from "./data/deployment";
 
 // Combine all categories in order
-export const categories: Category[] = [
+// Remove duplicates by filtering unique IDs
+const allCategories: Category[] = [
   gettingStartedCategory,
   htmlCategory,
   cssCategory,
@@ -33,6 +34,12 @@ export const categories: Category[] = [
   fullstackProjectsCategory,
   deploymentCategory,
 ];
+
+// Ensure no duplicates by filtering unique IDs
+export const categories: Category[] = allCategories.filter(
+  (category, index, self) => 
+    index === self.findIndex((c) => c.id === category.id)
+);
 
 // Helper functions
 export function getCategory(categoryId: string): Category | undefined {

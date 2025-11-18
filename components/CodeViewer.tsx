@@ -33,6 +33,16 @@ type MarkdownCodeProps = ComponentPropsWithoutRef<"code"> & {
   children?: ReactNode;
 };
 
+type MarkdownParagraphProps = ComponentPropsWithoutRef<"p"> & {
+  node?: {
+    children?: Array<{
+      type?: string;
+      tagName?: string;
+    }>;
+  };
+  children?: ReactNode;
+};
+
 const codeComponent = ({ inline, className, children, ...props }: MarkdownCodeProps) =>
   inline ? (
     <code
@@ -59,9 +69,29 @@ const markdownComponents: Components = {
   h3: (props) => (
     <h3 className="text-xl font-semibold text-white mt-5 mb-2" {...props} />
   ),
-  p: (props) => (
-    <p className="text-base leading-relaxed text-slate-200 mb-4" {...props} />
-  ),
+  p: ({ node, children, ...props }: MarkdownParagraphProps) => {
+    const hasBlockChild =
+      node?.children?.some(
+        (child) =>
+          child?.type === "element" &&
+          child?.tagName &&
+          ["pre", "div", "ol", "ul", "table"].includes(child.tagName)
+      ) ?? false;
+
+    if (hasBlockChild) {
+      return (
+        <div className="space-y-4 text-slate-200" {...props}>
+          {children}
+        </div>
+      );
+    }
+
+    return (
+      <p className="text-base leading-relaxed text-slate-200 mb-4" {...props}>
+        {children}
+      </p>
+    );
+  },
   ul: (props) => (
     <ul className="list-disc pl-6 space-y-2 text-slate-100 mb-4" {...props} />
   ),

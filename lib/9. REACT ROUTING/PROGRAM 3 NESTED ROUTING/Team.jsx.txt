@@ -1,0 +1,5 @@
+import React from "react";
+function Team() {
+  return <h3>Team: Developers, Designers, Managers</h3>;
+};
+export default Team;

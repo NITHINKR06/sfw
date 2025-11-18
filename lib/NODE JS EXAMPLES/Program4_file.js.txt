@@ -1,0 +1,8 @@
+const fs = require('fs');
+
+const content = "Node.js makes file handling easy!";
+
+fs.writeFile('output.txt', content, err => {
+  if (err) throw err;
+  console.log('File written successfully!');
+});

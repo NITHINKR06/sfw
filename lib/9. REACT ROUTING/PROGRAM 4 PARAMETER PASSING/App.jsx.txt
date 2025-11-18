@@ -1,0 +1,26 @@
+// App.jsx
+import React from "react";
+import { BrowserRouter, Routes, Route, Link, useParams } from "react-router-dom";
+
+function User() {
+  const { id } = useParams(); // Extract route parameter
+  return <h2>User Profile for ID: {id}</h2>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/user/101">User 101</Link> |{" "}
+        <Link to="/user/202">User 202</Link> |{" "}
+        <Link to="/user/303">User 303</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/user/:id" element={<User />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

@@ -1,0 +1,11 @@
+const data = {
+  name: "Node.js",
+  version: "20.11.0",
+  description: "JavaScript runtime built on Chrome's V8 engine"
+};
+
+console.log("JSON Object:", data);
+console.log("Stringified JSON:", JSON.stringify(data));
+
+const parsed = JSON.parse(JSON.stringify(data));
+console.log("Parsed Back:", parsed.name);

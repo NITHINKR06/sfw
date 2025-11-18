@@ -1,0 +1,46 @@
+xport default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [showNote, setShowNote] = useState(false);
+
+  // --- Using IF ---
+  let welcomeMessage;
+  if (isLoggedIn) {
+    welcomeMessage = <h2>Welcome back, User!</h2>;
+  } else {
+    welcomeMessage = <h2>Please log in to continue.</h2>;
+  }
+
+  return (
+    <div
+      style={{
+        backgroundColor: darkMode ? "black" : "white",
+        color: darkMode ? "white" : "black",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
+      {/* IF example */}
+      {welcomeMessage}
+
+      {/* Ternary example */}
+      <p>{darkMode ? "Dark Mode is ON 🌙" : "Light Mode is ON ☀️"}</p>
+
+      {/* Logical AND example */}
+      {showNote && <p style={{ color: "orange" }}>🔔 Remember to save your work!</p>}
+
+      {/* Buttons */}
+      <button onClick={() => setIsLoggedIn(!isLoggedIn)} style={{ marginRight: "10px" }}>
+        {isLoggedIn ? "Log Out" : "Log In"}
+      </button>
+
+      <button onClick={() => setDarkMode(!darkMode)} style={{ marginRight: "10px" }}>
+        Toggle Mode
+      </button>
+
+      <button onClick={() => setShowNote(!showNote)}>
+        {showNote ? "Hide Note" : "Show Note"}
+      </button>
+    </div>
+  );
+}

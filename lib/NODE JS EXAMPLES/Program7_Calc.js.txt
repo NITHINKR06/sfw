@@ -1,0 +1,13 @@
+// calculator.js
+exports.add = (a, b) => a + b;
+exports.sub = (a, b) => a - b;
+exports.mul = (a, b) => a * b;
+exports.div = (a, b) => b !== 0 ? a / b : "Cannot divide by zero!";
+
+// 8_calculator_app.js
+const calc = require('./calculator');
+
+console.log("Add:", calc.add(10, 5));
+console.log("Subtract:", calc.sub(10, 5));
+console.log("Multiply:", calc.mul(10, 5));
+console.log("Divide:", calc.div(10, 5));

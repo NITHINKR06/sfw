@@ -1,0 +1,36 @@
+# 2. Install Git and Create a GitHub Account
+
+Git tracks your source code history, and GitHub hosts your repositories online.
+
+## Install Git
+1. Visit https://git-scm.com/downloads and download the installer for your OS.
+2. Run the installer with the default options. On Windows, leave **"Git from the command line"** selected so Git adds itself to PATH and installs Git Bash.
+3. Finish the setup wizard, then reopen your terminal so the new PATH is used.
+
+Verify Git is available:
+`ash
+git --version
+`
+You should see something like git version 2.46.1.windows.1.
+
+## Create or sign in to GitHub
+1. Open https://github.com/signup in your browser.
+2. Create an account (or sign in) and complete any verification steps.
+3. Optional: enable two-factor authentication under **Settings → Password and authentication**.
+
+## Configure Git identity
+Run the following commands in your preferred terminal (replace the placeholders with your details):
+`ash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+`
+Check that the values were stored:
+`ash
+git config --list --global
+`
+
+## What’s next?
+- Add SSH or HTTPS credentials later by following GitHub’s **SSH and GPG keys** guide.
+- Confirm you can reach GitHub by opening https://github.com/settings/keys (after logging in).
+
+When git --version works and your username/email are configured, proceed to Step 3.

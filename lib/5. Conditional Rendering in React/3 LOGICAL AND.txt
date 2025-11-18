@@ -1,0 +1,13 @@
+export default function App() {
+  const [showMessage, setShowMessage] = useState(false);
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <button onClick={() => setShowMessage(!showMessage)}>
+        Toggle Message
+      </button>
+
+      {showMessage && <p>This message is visible only when `showMessage` is true.</p>}
+    </div>
+  );
+}

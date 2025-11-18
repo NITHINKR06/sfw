@@ -1,0 +1,61 @@
+<html>
+  <head>
+	<title> example </title>
+  </head>
+  <body>
+	<script type="text/javascript">
+	  <!--
+		
+		var today = new Date();
+		
+		var dateString = today.toLocaleString();
+
+		var day = today.getDay();
+		
+		var d = today.getDate();
+
+		var month = today.getMonth();
+		
+		var year = today.getFullYear();
+
+		var timems = today.getTime();
+
+		var hour = today.getHours();
+
+		var minute = today.getMinutes();
+
+		var second = today.getSeconds();
+
+		var ms = today.getMilliseconds();
+
+		document.write( "Date: " + dateString + "<br />",
+				"Day: " + day + "<br />",
+				"Month: " + month + "<br />",
+				"Year: " + year + "<br />",
+				"Time in milliseconds: " + timems + "<br />",
+				"Hour: " + hour + "<br />",
+				"Minute: " + minute + "<br />",
+				"Second: " + second + "<br />",
+				"day of the month : " + d + "<br />",
+				"Millisecond: " + ms + "<br />");
+
+				
+		var dum1 = 1.00149265, product =1;
+
+		var start = new Date();
+
+		for(var count=0; count<10000; count++)
+			product = product + 1.000002 * dum1/1.00001;
+
+		var end = new Date();
+
+		var diff = end.getTime() - start.getTime();
+
+		document.write ("<br /> The loop took "+ diff + "milliseconds <br />");
+		
+	     // -->
+	   </script>
+	   </body>
+	</html>
+
+					

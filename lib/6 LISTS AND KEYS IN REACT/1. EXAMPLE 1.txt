@@ -1,0 +1,19 @@
+export default function App() {
+  const people = [
+    { id: "p1", name: "Alice" },
+    { id: "p2", name: "Bob" },
+    { id: "p3", name: "Charlie" },
+  ];
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h3>People</h3>
+      <ul>
+        {people.map(person => (
+          // key must be unique among the <li> siblings
+          <li key={person.id}>{person.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}

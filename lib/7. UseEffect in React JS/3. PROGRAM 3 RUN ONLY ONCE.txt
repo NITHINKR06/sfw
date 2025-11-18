@@ -1,0 +1,10 @@
+import React, { useEffect } from "react";
+function WelcomeMessage() {
+  useEffect(() => {
+    console.log("Welcome! This runs only once when component mounts.");
+  }, []); // Empty array → runs only once
+
+  return <h2>Hello, React Learner 👋</h2>;
+}
+
+export default WelcomeMessage;

@@ -1,0 +1,62 @@
+<html>
+  <head>
+	<title> example </title>
+  <script type="text/javascript">
+	<!--
+	    function chkName(event)
+		{
+		  //get the target node of the event 
+		  var myName = event.currentTarger;
+		  
+		  var pos = myName.search(/^[A-Z][a-z]+,[A-Z][a-z]+,[A-Z]\.?$/);
+		  /*^ -prevents any leading characters*/
+		  /*$ -prevents any trailing characters*/
+	 	  if(pos==-1)
+		  {
+                     
+		    alert("Name you entered " +myName+ " is not in proper format");
+		    document.getElementById("name").focus();
+		    document.getElementById("name").select();
+
+		    return false;
+    		  }
+		  else
+		    return true;
+	             		  	
+		}
+
+	   function chkPhone(event)
+		{
+		  var myPhone =  event.currentTarger;
+		  var pos = myPhone.value.search(/^\d{3}-\d{3}-\d{4}$/);
+		  if(pos==-1)
+		  {
+                    alert("Phone no you entered " +myPhone+ " is not in proper format");
+		    
+		    return false;
+    		  }
+		  else
+	 	    return true;
+		}
+			   
+	// -->
+  </script>
+  </head>
+  <body>
+     <form action ="">	
+          Name: <input type ="text" id="name" size="15"/> <br />
+	  Phone No: <input type ="text" id="phone" size="15" /> <br />
+	  
+          <input type = "reset" value="Reset"/>
+	  <input type = "submit" value="Submit"/>
+     </form>
+	<script type="text/javascript">
+	<!--
+	   var cnode = document.getElementById("name");	
+	   var pnode = document.getElementById("phone");	
+	   cnode.addEventListener("change", chkName,false);
+	   pnode.addEventListener("submit", chkPhone,false);
+	// -->
+        </script> 	
+  </body>
+</html>

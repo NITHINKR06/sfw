@@ -1,0 +1,6 @@
+import React from "react";
+function Company() {
+  return <h3>Company: Founded in 2020, Global Presence</h3>;
+};
+
+export default Company;

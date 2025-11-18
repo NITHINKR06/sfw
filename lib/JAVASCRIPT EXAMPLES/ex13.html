@@ -1,0 +1,52 @@
+<html>
+  <head>
+	<title> example </title>
+  <script type="text/javascript">
+	<!--
+	    function chkName()
+		{
+		  var myName = document.getElementById("name").value;
+		  var pos = myName.search(/^[A-Z][a-z]+,[A-Z][a-z]+,[A-Z]\.?$/);
+		  /*^ -prevents any leading characters*/
+		  /*$ -prevents any trailing characters*/
+	 	  if(pos==-1)
+		  {
+                     
+		    alert("Name you entered " +myName+ " is not in proper format");
+		    document.getElementById("name").focus();
+		    document.getElementById("name").select();
+
+		    return false;
+    		  }
+		  else
+		    return true;
+	             		  	
+		}
+
+	   function chkPhone()
+		{
+		  var myPhone = document.getElementById("phone").value; 
+		  var pos = myPhone.search(/^\d{3}-\d{3}-\d{4}$/);
+		  if(pos==-1)
+		  {
+                    alert("Phone no you entered " +myPhone+ " is not in proper format");
+		    
+		    return false;
+    		  }
+		  else
+	 	    return true;
+		}
+			   
+	// -->
+  </script>
+  </head>
+  <body>
+     <form action ="">	
+          Name: <input type ="text" id="name" size="15" onchange="chkName();"/> <br />
+	  Phone No: <input type ="text" id="phone" size="15" /> <br />
+	  
+          <input type = "reset" value="Reset"/>
+	  <input type = "submit" value="Submit" onclick="chkPhone();" />
+     </form>
+  </body>
+</html>

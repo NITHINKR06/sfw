@@ -1,0 +1,32 @@
+<html>
+  <head>
+	<title> example </title>
+  <script type="text/javascript">
+	<!--
+	/* returns true if num has the form of a seven-digit phone num
+	   (3 digits, a dash, 4 digits) */
+	   
+	function test_phone_num(str)
+		{
+			
+		  var val = str.search(/^\d{3}-\d{4}$/);
+	  	  return val;
+		}
+	// -->
+	</script>
+    </head>
+    <body>
+	<script type="text/javascript">
+	<!--
+	    var str = prompt ("Enter the phone number","");
+		alert(str);
+	    var v = test_phone_num(str);
+		alert(v);
+	    if(v==-1)
+	        document.write("Phone Number is Invalid");
+	    else
+ 		document.write("Phone Number is Valid");
+	// -->
+	</script>
+	</body>
+	</html>

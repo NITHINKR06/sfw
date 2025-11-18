@@ -1,0 +1,467 @@
+Create a new vite project: 
+npm create vite@latest 
+.. 
+Install tailwindcss 
+npm install tailwindcss @tailwindcss/vite 
+ 
+Vite.config.js 
+ 
+import { defineConfig } from 'vite' 
+import react from '@vitejs/plugin-react' 
+import tailwindcss from '@tailwindcss/vite' 
+ 
+// https://vite.dev/config/ 
+export default defineConfig({ 
+  plugins: [react(), tailwindcss()], 
+}) 
+ 
+@import "tailwindcss"; 
+Copy to Index.css and delete all other contents. 
+ 
+Open App.jsx file and type following code to test if Tailwind CSS works or not: 
+import { useState } from 'react' 
+import './App.css' 
+function App() { 
+  const [count, setCount] = useState(0) 
+  return ( 
+    <> 
+      <h1 className='text-3xl bg-green-400'>password Generator Application</h1> 
+    </> 
+  ) 
+} 
+export default App 
+ 
+if you get following output, then the tailwind css is working fine. 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Page | 2 
+ 
+Project 1: 
+ 
+STEP 1: App.jsx 
+function App() { 
+  const [count, setCount] = useState(0) 
+ 
+  return ( 
+    <> 
+ 
+    </> 
+  ) 
+} 
+ 
+export default App 
+ 
+STEP 2: 
+<body className="bg-gray-100"> 
+        <header className="text-center py-8"> 
+            <h1 className="text-4xl font-bold">Feedback Form</h1> 
+        </header> 
+ 
+</body> 
+ 
+ 
+text-center: This class typically centers the text horizontally within the element. 
+py-8: In frameworks like Tailwind CSS, this class applies vertical padding (padding on the top and 
+bottom) with a spacing scale value of 8. 
+text-4xl: Sets the text size to 4 times extra large, making the text much larger than the default size. 
+Page | 3 
+ 
+font-bold: Makes the text bold. 
+ 
+STEP 3: 
+ 
+ 
+<form   action="#" method="post" className="bg-white shadow-md rounded px-8 pt-6 pb-8 
+mb-4 max-w-md mx-auto"> 
+              <fieldset> 
+                <legend className="text-lg font-semibold mb-4 text-left">Contact 
+Information</legend> 
+                <div className="mb-4"> 
+                      <label for="name" className="block text-sm font-medium text-gray-700 text-left"> 
+                      Name: 
+                      </label> 
+                      <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                        className="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 
+focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transform hover:scale-105 
+focus:scale-100 transition duration-300 ease-in-out" 
+                      /> 
+                </div> 
+              </fieldset> 
+        </form> 
+ 
+Explanation: 
+i.  bg-white: Sets the background color of the element to white. 
+ii.  shadow-md: Applies a medium-sized box shadow, giving the element a subtle depth 
+eƯect. 
+iii.  rounded: Rounds the corners of the element. 
+iv.  px-8: Adds horizontal padding (left and right) with a spacing scale value of 8. 
+v.  pt-6: Adds top padding with a spacing scale value of 6. 
+vi.  pb-8: Adds bottom padding with a spacing scale value of 8. 
+vii.  mb-4: Adds a bottom margin with a spacing scale value of 4. 
+viii.  max-w-md: Restricts the element’s maximum width to the medium size (typically around 
+28rem). 
+ix.  mx-auto: Centers the element horizontally by setting its left and right margins to auto. 
+Fieldset element: 
+ 
+Page | 4 
+ 
+The fieldset element in HTML5 is used to group related elements within a form. It's helpful for 
+organizing and visually distinguishing form sections. It’s often paired with the legend element, 
+which  provides  a  caption  or  title  for  the  group.  Here's  a  simple  example: 
+<fieldset><legend>Personal Information</legend>...</fieldset>. This helps improve readability 
+and accessibility. 
+text-lg:  Sets  the  text  size  to  large  (typically  around  1.125rem  or  18px,  depending  on  your 
+configuration). 
+font-semibold: Applies a semibold font weight, making the text appear slightly bolder. 
+mb-4: Adds a bottom margin using Tailwind's spacing scale, usually equivalent to 1rem (16px) by 
+default. 
+text-left: Aligns the text to the left. 
+ 
+block: 
+Forces the element to display as a block-level element, meaning it will take up the full width 
+available and start on a new line. 
+text-sm: 
+Sets the font size to small (usually around 0.875rem or 14px by default), making the text slightly 
+smaller than the default. 
+font-medium: 
+Applies a medium font weight, giving the text a bit more emphasis than normal text without 
+being as heavy as font-bold. 
+text-gray-700: 
+Sets the text color to a specific shade of gray. In Tailwind's default color palette, gray-700 is a 
+moderately dark gray. 
+text-left: 
+Aligns the text to the left, ensuring that the content starts from the left edge of the container. 
+ 
+mt-1: Adds a small top margin (usually 0.25rem) to create vertical spacing. 
+p-2: Adds padding on all sides (typically 0.5rem) for internal spacing. 
+block: Makes the element a block-level element so it takes up the full available width. 
+w-full: Sets the element's width to 100% of its parent container. 
+rounded-md: Applies a medium border radius, rounding the corners. 
+border: Adds a default border (usually 1px solid). 
+outline-none: Removes the default focus outline, allowing custom focus styles to show. 
+border-gray-300: Sets the initial border color to a light gray. 
+focus:border-indigo-500: When the element is focused (clicked or tabbed into), the border color 
+changes to a vibrant indigo. 
+focus:ring-1: Adds a ring (like an outline) of 1 unit thickness when the element is focused. 
+focus:ring-indigo-500: Sets the focus ring's color to indigo. 
+transform: Enables CSS transform properties so scaling animations can be applied. 
+hover:scale-105: Slightly enlarges the element (to 105% of its size) when hovered over. 
+focus:scale-100: Resets the scaling back to 100% when the element is focused, ensuring focus 
+and hover states don't conflict. 
+transition: Activates CSS transitions for a smoother change of properties. 
+duration-300: Sets the duration of the transitions to 300 milliseconds. 
+ease-in-out: Uses an ease-in-out timing function for the transitions, which starts slow, speeds 
+up, then slows down again. 
+ 
+ 
+Page | 5 
+ 
+STEP 4: 
+    Add the following code: 
+     
+    <div className="mb-4"> 
+                      <label for="email" className="block text-sm font-medium text-gray-700 text-left"> 
+                      Email: 
+                      </label> 
+                      <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        className="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 
+focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transform hover:scale-105 
+focus:scale-100 transition duration-300 ease-in-out" 
+                      /> 
+  </div> 
+  <div className="mb-4"> 
+                      <label for="feedback" className="block text-sm font-medium text-gray-700 text-
+left"> 
+                      Feedback: 
+                      </label> 
+                      <textarea name="textare" id="address" className="mt-1 p-2 block w-full rounded-
+md border outline-none border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-
+500 transform hover:scale-105 focus:scale-100 transition duration-300 ease-in-
+out"></textarea> 
+                </div> 
+                <button 
+                  type="submit" 
+className="w-full py-3 px-4 text-white font-semibold bg-indigo-500 rounded-md 
+focus:outline-none focus:bg-indigo-600 hover:bg-indigo-600 transform hover:scale-105 
+active:scale-95 transition duration-300 ease-in-out" 
+                > 
+                Submit  </button>            </fieldset>         </form> </body>  
+ 
+ 
+ 
+Page | 6 
+ 
+Project 2: 
+ 
+Step 1: 
+Build a navigation bar: 
+  
+<nav className="fixed left-0 top-0 z-20 w-full border-b border-gray-200 bg-white dark:border-
+gray-600 dark:bg-gray-900"> 
+      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4"> 
+       
+        <a href="#" className="flex items-center"> 
+          <img src="img1.png" class="mr-3 h-12" alt="Evento Logo" /> 
+          <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-
+white">Evento</span>  
+        </a> 
+        <div className="flex md:order-2"> 
+          <a href="#register"><button type="button" class="mr-0 rounded-lg bg-indigo-700 px-4 py-2 
+text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-
+4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800 
+md:mr-0">Register Now</button> 
+          </a> 
+        </div> 
+        <div className="hidden w-full items-center justify-between md:order-1 md:flex md:w-
+auto" id="navbar-sticky"> 
+        </div> 
+        <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 font-
+medium dark:border-gray-700 dark:bg-gray-800 md:mt-0 md:flex-row md:space-x-8 md:border-
+0 md:bg-white md:p-0 md:dark:bg-gray-900"> 
+          <li> 
+            <a href="#" className="block rounded bg-indigo-700 py-2 pl-3 pr-4 text-white md:bg-
+transparent md:p-0 md:text-indigo-700 md:dark:text-indigo-500" aria-
+current="page">Home</a> 
+          </li> 
+          <li> 
+            <a href="#agenda" className="block rounded py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-
+100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 
+md:hover:bg-transparent md:hover:text-indigo-700 md:dark:hover:bg-transparent 
+md:dark:hover:text-indigo-500">Agenda</a> 
+          </li> 
+          <li> 
+            <a href="#host" className="block rounded py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 
+dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 
+md:hover:bg-transparent md:hover:text-indigo-700 md:dark:hover:bg-transparent 
+md:dark:hover:text-indigo-500">Host</a> 
+          </li> 
+          <li> 
+            <a href="#review" className="block rounded py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-
+100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:p-0 
+Page | 7 
+ 
+md:hover:bg-transparent md:hover:text-indigo-700 md:dark:hover:bg-transparent 
+md:dark:hover:text-indigo-500">Review</a> 
+          </li> 
+          <li> 
+            <a href="#benefits" className="block rounded py-2 pl-3 pr-4 text-gray-900 hover:bg-
+gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white 
+md:p-0 md:hover:bg-transparent md:hover:text-indigo-700 md:dark:hover:bg-transparent 
+md:dark:hover:text-indigo-500">Benefits</a> 
+          </li> 
+        </ul> 
+    </div> 
+  </nav> 
+ 
+Explanation: 
+<nav  className="fixed  left-0  top-0  z-20  w-full  border-b  border-gray-200  bg-white 
+dark:border-gray-600 dark:bg-gray-900"> 
+ 
+This <nav> element represents a fixed top navigation bar with the following properties: 
+1.  Positioning: 
+o  fixed: The navbar stays fixed at the top of the viewport. 
+o  left-0 top-0: Ensures it is anchored to the top-left corner. 
+2.  Z-index: 
+o  z-20: Ensures the navbar is layered above most other elements. 
+3.  Size & Borders: 
+o  w-full: Makes the navbar span the full width of the viewport. 
+o  border-b border-gray-200: Adds a bottom border in light gray (border-gray-200). 
+o  dark:border-gray-600: In dark mode, the border color is darker (border-gray-600). 
+4.  Background Colors: 
+o  bg-white: Default background color is white. 
+o  dark:bg-gray-900: In dark mode, it changes to dark gray (gray-900). 
+ 
+ 
+<div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-
+4"> 
+ 
+</div> 
+ 
+This line creates a container for the NavBar content with flexbox properties for responsive layout 
+and spacing. 
+mx-auto: This centers the element horizontally by setting the left and right margins to auto. 
+flex: Applies Flexbox layout to the element. 
+max-w-screen-xl: Sets the maximum width of the element to the screen-xl size (which is typically 
+a large screen size in Tailwind CSS). 
+flex-wrap: Allows the child elements to wrap onto the next line if necessary. 
+items-center: Vertically aligns the child elements to the center of the container. 
+justify-between: Distributes the child elements with space between them, aligning them to the 
+start and end of the container. 
+p-4: Adds padding of 1rem (16px) to all sides of the element. 
+ 
+ 
+ 
+Page | 8 
+ 
+<a href="#" className="flex items-center"> 
+          <img src="img1.png" class="mr-3 h-12" alt="Evento Logo" /> 
+          <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-
+white">Evento</span>  
+        </a> 
+This  code  represents  a  hyperlink  (<a>)  with  a  flexbox  layout,  containing  an  image  (<img>) 
+positioned to the left with a margin (mr-3) and a text (<span>) "Evento" aligned to the centre 
+vertically, with specific font size, font weight, and white colour with dark mode.  
+mr-3: Adds a right margin of 0.75rem (12px), creating spacing between this image and adjacent 
+elements. 
+h-12: Sets the height of the image to 3rem (48px). 
+ 
+self-center → Aligns the element to the center of its parent (useful in a flex container). 
+whitespace-nowrap → Prevents text from wrapping onto a new line. 
+text-2xl → Sets the font size to 1.5rem (24px). 
+font-semibold → Applies a semi-bold font weight. 
+dark:text-white → Changes the text color to white in dark mode (useful when Tailwind's dark 
+mode feature is enabled). 
+ 
+ 
+<div className="flex md:order-2"> 
+          <a href="#register"><button type="button" class="mr-0 rounded-lg bg-indigo-700 px-4 
+py-2 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none 
+focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 
+dark:focus:ring-indigo-800 md:mr-0">Register Now</button> 
+          </a> 
+        </div> 
+ 
+This code creates a flex container (<div>) with flexbox properties for responsive design (md:order-
+2). Inside the container, there is a hyperlink (<a>) with a "Register Now" button (<button>) styled 
+with specific background colour, padding, text properties, and hover eƯects for both light and 
+dark themes. 
+ 
+flex → Applies Flexbox to the element, making it a flex container. This allows child elements to be 
+aligned and positioned using flex properties. 
+md:order-2 → This is a responsive utility class that aƯects the order of the element inside a flex 
+container on md (medium) screens and larger. 
+It moves the element to the second position (order-2) when the screen width is at least 768px (md 
+breakpoint). 
+Before md, the default order applies (usually order-0). 
+ 
+mr-0 → No right margin. 
+rounded-lg → Large border radius for rounded corners. 
+bg-indigo-700 → Background color (indigo shade). 
+px-4 py-2 → Padding (horizontal: 4, vertical: 2). 
+text-center → Centers text. 
+text-sm font-medium → Small text size with medium font weight. 
+text-white → White text color. 
+hover:bg-indigo-800 → Darker indigo on hover. 
+focus:outline-none → Removes default focus outline. 
+focus:ring-4 focus:ring-indigo-300 → Adds a focus ring with a soft indigo highlight. 
+Page | 9 
+ 
+dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800 → Dark mode styles. 
+ 
+<a href="#agenda" className="block rounded py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-
+100  dark:border-gray-700  dark:text-white  dark:hover:bg-gray-700  dark:hover:text-white 
+md:p-0 md:hover:bg-transparent md:hover:text-indigo-700 md:dark:hover:bg-transparent 
+md:dark:hover:text-indigo-500"> 
+ 
+block → Makes the anchor behave like a block element. 
+rounded → Adds rounded corners. 
+py-2 pl-3 pr-4 → Adds padding: 
+py-2 → Vertical padding (top & bottom). 
+pl-3 → Left padding. 
+pr-4 → Right padding. 
+text-gray-900 → Sets text color to dark gray. 
+hover:bg-gray-100 → Changes background color to light gray on hover. 
+dark:border-gray-700 → Applies a gray border in dark mode. 
+dark:text-white → Sets text color to white in dark mode. 
+dark:hover:bg-gray-700 dark:hover:text-white → Dark mode styles: 
+Changes background to dark gray on hover. 
+Keeps text white on hover. 
+md:p-0 → Removes padding on medium screens (md breakpoint and above). 
+md:hover:bg-transparent → Ensures no background change on hover in medium screens. 
+md:hover:text-indigo-700 → Changes text color to indigo when hovered in medium screens. 
+md:dark:hover:bg-transparent md:dark:hover:text-indigo-500 → 
+In dark mode, prevents background change on medium screens. 
+Changes text to a softer indigo shade when hovered. 
+ 
+Step 2: 
+ 
+<section className="bg-gray-700 bg-[url(/img2.jpg)] bg-center bg-no-repeat bg-blend-multiply 
+mt-6 h-screen bg-contain"> 
+    <div class="mx-auto max-w-screen-xl px-4 py-24 text-center lg:py-56"> 
+      <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl 
+lg:text-6xl">Unleashing the Power of Web Development</h1> 
+      <p class="mb-8 text-lg font-normal text-gray-300 sm:px-16 lg:px-48 lg:text-xl">Join us for an 
+exciting  journey  into  the  world  of  web  development,  where  we  believe  in  harnessing  the 
+boundless potential of innovation, technology, and capital.</p> 
+      <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-
+0"> 
+        <a href="#register" class="inline-flex items-center justify-center rounded-lg bg-indigo-700 px-
+5 py-3 text-center text-base font-medium text-white hover:bg-indigo-800 focus:ring-4 focus:ring-
+indigo-300 dark:focus:ring-indigo-900"> 
+          Book Your Spot Now 
+          <svg aria-hidden="true" class="-mr-1 ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" 
+xmlns="http://www.w3.org/2000/svg"><path  fill-rule="evenodd"  d="M10.293  3.293a1  1  0 
+011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-
+4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> 
+        </a> 
+        <a href="#agenda" class="inline-flex items-center justify-center rounded-lg border border-
+white px-5 py-3 text-center text-base font-medium text-white hover:bg-gray-100 hover:text-gray-
+900 focus:ring-4 focus:ring-gray-400"> Learn more </a> 
+Page | 10 
+ 
+      </div> 
+    </div> 
+  </section> 
+ 
+bg-gray-700 → Sets the background color to a dark gray (#374151). 
+bg-[url(/img2.jpg)] → Sets a background image from /img2.jpg. 
+bg-center → Centers the background image. 
+bg-no-repeat → Ensures the background image does not repeat. 
+bg-blend-multiply → Blends the background image with the background color using the multiply 
+blend mode. 
+mt-6 → Adds a top margin of 1.5rem (24px). 
+h-screen → Sets the height to the full viewport height. 
+bg-contain  →  Ensures  the  background  image  is  fully  contained  within  the  element  without 
+cropping. 
+ 
+ 
+mx-auto → Centers the div horizontally. 
+max-w-screen-xl → Limits the maximum width to screen-xl (1280px), ensuring it doesn’t stretch 
+beyond this size. 
+px-4 → Adds horizontal padding of 1rem (16px) on both sides. 
+py-24 → Adds vertical padding of 6rem (96px) on top and bottom. 
+text-center → Centers all text inside the div. 
+lg:py-56 → In large screens (lg), increases the vertical padding to 14rem (224px). 
+ 
+ 
+ 
+ 
+ 
+          <svg aria-hidden="true" class="-mr-1 ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" 
+xmlns="http://www.w3.org/2000/svg"> 
+ 
+aria-hidden="true" → Hides the icon from screen readers (since it is decorative and not meant for 
+accessibility). 
+class="-mr-1 ml-2 h-4 w-4" → Tailwind CSS styles: 
+-mr-1 → Small negative right margin (shifts left slightly). 
+ml-2 → Adds left margin (0.5rem or 8px). 
+h-4 w-4 → Sets the height and width to 1rem (16px). 
+fill="currentColor" → Inherits text color, making it adapt to diƯerent themes. 
+viewBox="0 0 20 20" → Defines the coordinate system for scaling. 
+xmlns="http://www.w3.org/2000/svg"  →  Defines  the  SVG  namespace  (required  for  proper 
+rendering). 
+<path> → Defines the actual shape of the arrow. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

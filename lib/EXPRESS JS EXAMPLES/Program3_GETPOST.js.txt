@@ -1,0 +1,27 @@
+const express = require('express');
+const app = express();
+
+// Middleware to parse JSON data
+app.use(express.json());
+
+// Middleware to parse form data (URL-encoded data)
+app.use(express.urlencoded({ extended: true }));
+
+// GET route
+app.get('/welcome', (req, res) => {
+  res.send('Welcome to the GET route!');
+});
+
+// POST route (handles both JSON and HTML form data)
+app.post('/welcome', (req, res) => {
+  const userData = req.body; // works for both JSON & form data
+  console.log('📩 Data received via POST:', userData);
+
+  res.send({
+    message: 'Data received via POST!',
+    receivedData: userData
+  });
+});
+
+// Start server
+app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));

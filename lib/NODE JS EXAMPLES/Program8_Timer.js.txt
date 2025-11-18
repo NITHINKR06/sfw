@@ -1,0 +1,15 @@
+console.log("Program started...");
+
+setTimeout(() => {
+  console.log("This message appears after 3 seconds!");
+}, 3000);
+
+let count = 0;
+const interval = setInterval(() => {
+  count++;
+  console.log(`Count: ${count}`);
+  if (count === 5) {
+    clearInterval(interval);
+    console.log("Interval cleared!");
+  }
+}, 1000);

@@ -1,0 +1,35 @@
+import React, { useState, useEffect } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+
+
+function NameTracker() {
+  const [fname, setfName] = useState("");
+  const [lname, setlName] = useState("");
+
+  useEffect(() => {
+    console.log("Name updated:", fname);
+  }, [fname]); // Runs only when `fname` changes
+
+  return (
+    <div>
+      <input 
+        type="text"
+        placeholder="Enter first name"
+        value={fname}
+        onChange={(e) => setfName(e.target.value)}
+      />
+      <p>Current Name: {fname}</p>
+      <input 
+        type="text"
+        placeholder="Enter last name"
+        value={lname}
+        onChange={(e) => setlName(e.target.value)}
+      />
+      <p>Current Name: {lname}</p>
+    </div>
+  );
+}
+
+export default NameTracker;

@@ -1,0 +1,31 @@
+<html>
+  <head>
+	<title> example </title>
+	<script type="text/javascript">
+	<!--
+	   function first_vowel(str)
+ 	    {
+              
+		for (var i=0; i<str.length;i++)
+		{
+			if(str.charAt(i)=="a" || str.charAt(i)=="e" || str.charAt(i)=="i" || str.charAt(i)=="o" || str.charAt(i)=="u")
+			return i;
+		}
+		return -1;
+	    }
+ 	// -->
+	</script>
+	</head>
+	<body>
+	  <script type="text/javascript">
+	  <!--
+             var s = prompt ("Enter the string \n","");
+	     var val = first_vowel(s);
+	     if(val == -1)
+		document.write ("No vowel in the given string <br />");
+	     else
+		document.write ("First Vowel found at position ", val, " <br />");
+	  // -->
+	  </script>
+	</body>
+	</html>

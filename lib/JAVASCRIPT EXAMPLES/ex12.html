@@ -1,0 +1,39 @@
+<html>
+  <head>
+	<title> example </title>
+  <script type="text/javascript">
+	<!--
+	    function compute()
+		{
+		  var n1 = document.getElementById("t1").value;
+		  var n2 = document.getElementById("t2").value; 
+	          var a=Number(n1);
+		  alert(a);	
+		  if(isNaN(a))
+			{
+	   		   alert("Enter the number!!");
+			   return;
+			}
+
+		  var b=Number(n2);
+		  if(isNaN(b))
+			{
+	   		   alert("Enter the number!!");
+			   return;
+			}
+		  var n3 = a+b;
+		  document.getElementById("t3").value = n3; 
+		  	
+		}
+	// -->
+  </script>
+  </head>
+  <body>
+     <form action ="">	
+          Number1: <input type ="text" id="t1" size="5" /> <br />
+	  Number2: <input type ="text" id="t2" size="5" /> <br />
+	  Result:  <input type ="text" id="t3" size="5" onfocus = "this.blur();"/> <br /> 
+          <input type = "button" value="Calculate" onclick = "compute();" />
+     </form>
+  </body>
+</html>

@@ -65,11 +65,7 @@ interface PracticePlaygroundProps {
   categoryTitle?: string;
 }
 
-export default function PracticePlayground({
-  topics,
-  initialTopicId,
-  categoryTitle,
-}: PracticePlaygroundProps) {
+export default function PracticePlayground(props: PracticePlaygroundProps) {
   const isLabAvailable = false;
 
   if (!isLabAvailable) {
@@ -90,6 +86,14 @@ export default function PracticePlayground({
     );
   }
 
+  return <PracticePlaygroundActive {...props} />;
+}
+
+function PracticePlaygroundActive({
+  topics,
+  initialTopicId,
+  categoryTitle,
+}: PracticePlaygroundProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [currentTab, setCurrentTab] = useState<Language>("html");
   const [code, setCode] = useState<Record<Language, string>>(defaultSnippets);

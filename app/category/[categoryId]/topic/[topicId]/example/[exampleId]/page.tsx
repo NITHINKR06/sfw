@@ -86,7 +86,7 @@ export default async function ExamplePage({ params }: PageProps) {
 
       <main className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-14">
         <div className="grid gap-8 lg:grid-cols-[320px,1fr] items-start">
-          <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 space-y-6 h-fit sticky top-6 shadow-xl shadow-black/40">
+          <aside className="rounded-3xl border border-white/10 bg-slate-950 p-6 space-y-6 h-fit shadow-xl shadow-black/40">
             <div className="space-y-2">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
                 Step Navigator
